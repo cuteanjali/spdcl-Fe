@@ -1,0 +1,137 @@
+<div class="data-grid">
+
+    <div class="mat-elevation-z8">
+        <div >
+            <table mat-table  [dataSource]="dataSource" matSort class="w-100" [matSortActive]="sortBy"
+                matSortDisableClear [matSortDirection]="sortDirection" (matSortChange)="sortChangeClick.emit($event)">
+            
+                <span *ngFor="let item of gridSettings; index as i;">
+
+                    <ng-container [matColumnDef]="item.columnName" *ngIf="(!item.type || item.type==='' || item.type===columnType.TEXT) && item.show">
+                        <ng-container *ngIf="item.sort">
+                            <th mat-header-cell mat-sort-header disableClear *matHeaderCellDef>{{item.columnTitleKey ? t(item.columnTitleKey): item.columnTitle}} </th>
+                        </ng-container>
+                        <ng-container *ngIf="!item.sort">
+                            <th mat-header-cell *matHeaderCellDef>{{item.columnTitleKey ? t(item.columnTitleKey): item.columnTitle}} </th>
+                        </ng-container>
+                        <td mat-cell (click)="enableRowClick? handleRowClick(element) :''" [matTooltip]="element[item.columnValue]" *matCellDef="let element">{{element[item.columnValue]}}</td>
+                    </ng-container>
+
+                    <ng-container [matColumnDef]="item.columnName" *ngIf="item.type===columnType.TEXT_W_ELLIP && item.show">
+                        <ng-container *ngIf="item.sort">
+                            <th mat-header-cell mat-sort-header disableClear *matHeaderCellDef>{{item.columnTitleKey ? t(item.columnTitleKey): item.columnTitle}} </th>
+                        </ng-container>
+                        <ng-container *ngIf="!item.sort">
+                            <th mat-header-cell *matHeaderCellDef>{{item.columnTitleKey ? t(item.columnTitleKey): item.columnTitle}} </th>
+                        </ng-container>
+                        <td mat-cell (click)="enableRowClick? handleRowClick(element) :''" *matCellDef="let element" [matTooltip]="element[item.columnValue]">
+                            <span class="text-ellipsis" >{{element[item.columnValue]}}</span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container [matColumnDef]="item.columnName" *ngIf="item.type===columnType.TEXT_W_ELLIP_L && item.show">
+                        <ng-container *ngIf="item.sort">
+                            <th mat-header-cell mat-sort-header disableClear *matHeaderCellDef>{{item.columnTitleKey ? t(item.columnTitleKey): item.columnTitle}} </th>
+                        </ng-container>
+                        <ng-container *ngIf="!item.sort">
+                            <th mat-header-cell *matHeaderCellDef>{{item.columnTitleKey ? t(item.columnTitleKey): item.columnTitle}} </th>
+                        </ng-container>
+                        <td mat-cell (click)="enableRowClick? handleRowClick(element) :''" *matCellDef="let element" [matTooltip]="element[item.columnValue]">
+                            <span class="text-ellipsis-l" >{{element[item.columnValue]}}</span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container [matColumnDef]="item.columnName" *ngIf="item.type===columnType.LINK && item.show">
+                        <ng-container *ngIf="item.sort">
+                            <th mat-header-cell mat-sort-header disableClear *matHeaderCellDef>{{item.columnTitleKey ? t(item.columnTitleKey): item.columnTitle}} </th>
+                        </ng-container>
+                        <ng-container *ngIf="!item.sort">
+                            <th mat-header-cell *matHeaderCellDef>{{item.columnTitleKey ? t(item.columnTitleKey): item.columnTitle}} </th>
+                        </ng-container>
+                        <td mat-cell *matCellDef="let element" [matTooltip]="element[item.columnValue]">
+                            <span class="text-ellipsis cursor-pointer" (click)="handleLinkClick(element)">{{element[item.columnValue]}}</span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container [matColumnDef]="item.columnName" *ngIf="item.type===columnType.CHECKBOX && item.show">
+                        <ng-container *ngIf="item.sort">
+                            <th mat-header-cell mat-sort-header disableClear *matHeaderCellDef>{{item.columnTitleKey ? t(item.columnTitleKey): item.columnTitle}} </th>
+                        </ng-container>
+                        <ng-container *ngIf="!item.sort">
+                            <th mat-header-cell *matHeaderCellDef>{{item.columnTitleKey ? t(item.columnTitleKey): item.columnTitle}} </th>
+                        </ng-container>
+                        <td mat-cell *matCellDef="let element" >
+                            <mat-checkbox [disabled]="element.disableCheckbox" [(ngModel)]="element[item.checkboxParameter]" (ngModelChange)="handleCheckBoxClick(element, item.checkboxParameter)"></mat-checkbox>
+                        </td>
+                    </ng-container>
+                    
+
+                    <ng-container [matColumnDef]="item.columnName" *ngIf="item.type===columnType.EMAIL && item.show">
+                        <ng-container *ngIf="item.sort">
+                            <th mat-header-cell mat-sort-header disableClear *matHeaderCellDef>{{item.columnTitleKey ? t(item.columnTitleKey): item.columnTitle}} </th>
+                        </ng-container>
+                        <ng-container *ngIf="!item.sort">
+                            <th mat-header-cell *matHeaderCellDef>{{item.columnTitleKey ? t(item.columnTitleKey): item.columnTitle}} </th>
+                        </ng-container>
+                        <td mat-cell (click)="enableRowClick? handleRowClick(element) :''" *matCellDef="let element" [matTooltip]="element[item.columnValue]">
+                            <span class="mail-ellipsis">{{element[item.columnValue]}}</span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container [matColumnDef]="item.columnName" *ngIf="item.type===columnType.DATE && item.show">
+                        <ng-container *ngIf="item.sort">
+                            <th mat-header-cell mat-sort-header disableClear *matHeaderCellDef>{{item.columnTitleKey ? t(item.columnTitleKey): item.columnTitle}} </th>
+                        </ng-container>
+                        <ng-container *ngIf="!item.sort">
+                            <th mat-header-cell *matHeaderCellDef>{{item.columnTitleKey ? t(item.columnTitleKey): item.columnTitle}} </th>
+                        </ng-container>
+                        <td mat-cell (click)="enableRowClick? handleRowClick(element) :''" *matCellDef="let element" [matTooltip]="element[item.columnValue]| date:'dd-MM-yyyy'">{{element[item.columnValue] | date:'dd-MM-yyyy'}}</td>
+                    </ng-container>
+
+                    <ng-container [matColumnDef]="item.columnName" *ngIf="item.type===columnType.BUTTON && item.show">
+                        <ng-container *ngIf="item.sort">
+                            <th mat-header-cell mat-sort-header disableClear *matHeaderCellDef>{{item.columnTitleKey ? t(item.columnTitleKey): item.columnTitle}} </th>
+                        </ng-container>
+                        <ng-container *ngIf="!item.sort">
+                            <th mat-header-cell *matHeaderCellDef>{{item.columnTitleKey ? t(item.columnTitleKey): item.columnTitle}} </th>
+                        </ng-container>
+                        <td mat-cell *matCellDef="let element" >
+                            <button mat-icon-button [disabled]="element[item.button.disableBtnParam]" [matTooltip]="t(item?.button?.tooltipKey)" mat-icon-button data-placement="bottom" (click)="element[item.button.disableBtnParam]? '' : handleButtonClick(element, item)">
+                                {{item?.button?.buttonName}}
+                                <ng-container *ngIf="item?.button?.icon&&item?.button?.isIconSvg">
+                                    <mat-icon [class]="item?.button?.buttonClass" [svgIcon]="item?.button?.icon" [style.color]="element[item?.button?.colorParameter]"></mat-icon>
+                                </ng-container>
+                                <ng-container *ngIf="item?.button?.icon&&!item?.button?.isIconSvg">
+                                    <mat-icon [class]="item?.button?.buttonClass">{{item?.button?.icon}}</mat-icon>
+                                </ng-container>
+                            </button>
+                        </td>
+                    </ng-container>
+                </span>
+                
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            </table>
+        </div>
+
+        <div class="no-data-found text-center" *ngIf="!loading && dataSource.length === 0">
+            {{nodataMessage}}
+        </div>
+
+        <div class="text-center" *ngIf="loading">
+            <mat-spinner class="grid-loading orange-spinner"></mat-spinner>
+        </div> 
+
+
+        <ng-container *ngIf="showPagination">
+            <mat-paginator
+                [length]="totalRecordCount"
+                [pageSize]="pageSize"
+                [pageSizeOptions]="[5, 10, 25, 100]"
+                (page)="getPageData($event)"
+            ></mat-paginator>
+        </ng-container>
+        
+    </div>
+</div>

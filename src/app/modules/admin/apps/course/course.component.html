@@ -1,0 +1,271 @@
+
+
+<mat-sidenav-container fullscreen [hasBackdrop]="false" *transloco="let t; read: 'COURSE'">
+    <div class="relative flex flex-col flex-auto min-w-0 overflow-hidden">
+    
+        <!-- Header -->
+    
+        <div class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-3 sm:px-10 border-b bg-card dark:bg-transparent">
+            <div class="flex-1 min-w-0">
+                <!-- Breadcrumbs -->
+              
+                <!-- Title -->
+                
+                <div class="mt-2">
+                    <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                        {{t('Course')}}
+                    </h2>
+                </div>
+            </div>
+            <div class="flex items-center justify-end">
+                <div class="example-header">
+                    <mat-form-field>
+                        <mat-icon>search</mat-icon>
+                      <input (keyup)="applyFilter($event.target.value)" matInput  placeholder="{{t('SEARCH')}}">
+                    </mat-form-field>
+                  </div>
+            </div> 
+    
+            <button mat-flat-button="" type="button" (click)="sidenav.toggle();addDialog()"
+            class="mat-focus-indicator ml-4 mat-flat-button mat-button-base mat-primary" style="background: #941C3C;"><span
+                class="mat-button-wrapper"> <mat-icon class="material-icons">
+                    add
+                </mat-icon> {{t('Add Course')}} </span>
+            
+        </button>
+        </div>
+    
+        <!-- Header & Cards -->
+        <div class="relative pb-12 sm:pt-0 sm:pb-2 px-6 sm:px-6 overflow-hidden">
+            
+            <!-- Card -->
+            <div class="flex flex-col items-center mt-10 sm:mt-5">
+                <fuse-card class="flex-col lg:flex-row w-full lg:max-w-7xl overflow-x-auto overflow-y-hidden">
+                  
+                    <div class="grid grid-flow-col lg:grid-flow-row min-w-max lg:min-w-0 divide-x lg:divide-x-0 lg:divide-y"
+                        style="width: 100%">
+
+                        <app-data-grid
+                            [gridSettings]="gridColumns"
+                            [dataSource]="dataSource"
+                            [totalRecordCount]="totalRecordCount"
+                            [loading]="loading"
+                            [pageIndex]="apiRequest?.pageNo"
+                            [pageSize]="pageSize"
+                            [nodataMessage]="'No Data Found'"
+                            [t]="t"
+                            [sortBy]="sortBy"
+                            [sortDirection]="sortDirection"
+                            [enableRowClick]="true"
+                            (checkboxClick)="handleCheckBoxClick($event)"
+                            (buttonClick)="handleButtonClick($event, content)"
+                            (fetchPageData)="handlePageFetch($event)"
+                            (sortChangeClick)="handleSortChange($event)"
+                            (rowClick)="handleRowClick($event)"
+                        ></app-data-grid>
+                        <!-- <div class="example-loading-shade" style="margin: auto;margin-top: 50px;" *ngIf="loading && sortBool">
+                            <mat-spinner *ngIf="loading" class="orange-spinner"></mat-spinner>
+                            
+                        </div>
+    
+                        <div class="mat-elevation-z8">
+
+                            
+                        <div  *ngIf="(data1 | async) as dataLoaded "> 
+                            <table mat-table [dataSource]="dataLoaded?.courseGetBeans" style="width: 100%" matSort matSortActive="courseName"
+                            matSortDisableClear matSortDirection="desc" (matSortChange)="applySort($event)">
+    
+                                <ng-container matColumnDef="courseName">
+                                    <th  mat-header-cell *matHeaderCellDef mat-sort-header>{{t('Course')}}</th>
+                                    <td matTooltip ="{{element.courseName}}" [routerLink]="['/apps/course/coursedetail/'+element.id]" mat-cell *matCellDef="let element"> 
+                            {{((element.courseName).length > 10) ? ((element.courseName).slice(0, 10) + '...') : element.courseName}}
+                                     </td>
+                                </ng-container>
+    
+    
+                                <ng-container matColumnDef="courseUniqueId">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{t('Course Id')}}</th>
+                                    <td  matTooltip ="{{element.courseUniqueId}}" [routerLink]="['/apps/course/coursedetail/'+element.id]" mat-cell *matCellDef="let element"> 
+                                        {{element.courseUniqueId}} 
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="userEntity">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{t('Instructor Name')}}</th>
+                                    <td matTooltip ="{{element.userName}}" [routerLink]="['/apps/course/coursedetail/'+element.id]" mat-cell *matCellDef="let element"> 
+                                        {{((element.userName).length > 10) ? ((element.userName).slice(0, 10) + '...') : element.userName}} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="startDate">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{t('Course Date')}}</th>
+                                    <td matTooltip ="{{element.startDateStr}}" [routerLink]="['/apps/course/coursedetail/'+element.id]" mat-cell *matCellDef="let element"> {{element.startDateStr}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="place">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{t('Place')}}</th>
+                                    <td matTooltip ="{{element.place}}" [routerLink]="['/apps/course/coursedetail/'+element.id]" mat-cell *matCellDef="let element">
+                                        {{((element.place).length > 10) ? ((element.place).slice(0, 10) + '...') : element.place}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="isActive">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> {{t('Status')}}</th>
+                                    <td [routerLink]="['/apps/course/coursedetail/'+element.id]" mat-cell *matCellDef="let element"> <span *ngIf="element.status ==='Inactive'"> Cancelled </span> <span *ngIf="element.status ==='Active'"> {{element.status}} </span> </td>
+                                    
+                                    
+                                </ng-container>
+    
+    
+                                <ng-container matColumnDef="action">
+                                    <th mat-header-cell *matHeaderCellDef>{{t('Action')}}</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <button style="color: blue;" matTooltip="{{t('Edit')}}"  data-toggle="tooltip" data-placement="bottom" (click)="sidenav.open();editdialog(element)"
+                                            class="Edit"><span class="mat-button-wrapper"><mat-icon role="img" class="mat-icon notranslate text-blue-600 mat-icon-no-color" aria-hidden="true" data-mat-icon-type="svg" data-mat-icon-name="pencil-alt" data-mat-icon-namespace="heroicons_outline">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#941C3C" fit="" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" focusable="false">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                        </svg></mat-icon></span>
+                                        </button>&nbsp;
+                                        <button matTooltip="{{t('Delete')}}"  (click)="openSubPopUp(content,element.id)" style="color: #941C3C;"><i class="material-icons">delete</i></button>
+                                    </td>
+                                </ng-container>
+    
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            </table>
+                            
+                        </div>
+                            <span *ngIf="loading && !sortBool">
+                                <mat-spinner style="margin: auto;margin-top: 50px;" class="orange-spinner"></mat-spinner>
+                            </span>
+
+                            <mat-paginator #paginator
+                            [length] = "resultsLength"                                 
+                            [pageSize]="apirequest.pageSize"
+                            [pageSizeOptions]="[10, 25, 100]"
+                            (page)="getPageDetails($event)">
+                            </mat-paginator>
+                        
+                       
+                        </div> -->
+    
+                    </div>
+                </fuse-card>
+            </div>
+        </div>
+    
+    </div>
+    <mat-sidenav #sidenav mode="over" backdrop="false" class="example-sidenav" [ngStyle]="{ 'width.%': sidenavWidth }"
+        opened="false" position="end">
+        <!-- Form Title -->
+        <mat-toolbar class="mat-accent m-0 mail-compose-dialog">
+            <mat-toolbar-row fxFlex fxLayout="row" fxLayoutAlign="space-between center" style="background: #941C3C;color: white;">
+                <span class="title dialog-title">{{title}}</span>
+                <div class="flex items-center pl-2 ml-auto space-x-0.5 sm:space-x-2">
+                    <button mat-icon-button (click)="sidenav.toggle();" aria-label="Close dialog">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </div>
+            </mat-toolbar-row>
+        </mat-toolbar>
+  
+        <mat-dialog-content class="m-0 form formGroup h-auto" fusePerfectScrollbar>
+
+            <form [formGroup]="CourseForm" fxFlex class="event-form w-100-p">
+                <div fxLayout="column" class="p-20" style="padding: 1rem !important;">
+
+                    <mat-form-field style="width: 100%;" appearance="outline">
+                        <mat-label>{{t('Course')}}</mat-label>
+                        <input matInput formControlName="courseName">
+                        <mat-error>{{t('Course is required')}}</mat-error>
+                    </mat-form-field>
+                    <mat-form-field style="width: 100%" appearance="outline">
+                        <mat-label>{{t('Instructor Name')}}</mat-label>
+                        <mat-select formControlName="userId">
+                            <mat-option *ngFor="let item of Instructorlist" [value]="item.id">{{item.value}}</mat-option> 
+                        </mat-select>
+                        <mat-error>{{t('Instructor Name is required')}}</mat-error>
+                    </mat-form-field>
+                    <mat-form-field style="width: 100%;" appearance="outline">
+                        <mat-label>{{t('Place')}}</mat-label>
+                        <input matInput formControlName="place">
+                    </mat-form-field>
+                    <mat-form-field  appearance="outline">
+                        <mat-label>{{t('Course Date')}}</mat-label>
+                        <input matInput [matDatepicker]="date1" [min]="todayDate" formControlName="startDate">
+                        <mat-datepicker-toggle matSuffix [for]="date1">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #date1></mat-datepicker>
+                        <mat-error>{{t('Course Date is required')}}</mat-error>
+                    </mat-form-field>&nbsp;&nbsp;
+                    <mat-form-field  appearance="outline">
+                        <mat-label>{{t('Time')}} </mat-label>
+                        <mat-error>{{t('Time is required')}}</mat-error>
+                        <input matInput [ngxTimepicker]="fulltime1" formControlName="startTime" [format]="12">
+                        <ngx-material-timepicker-toggle matSuffix [for]="fulltime1"></ngx-material-timepicker-toggle>
+    
+                    </mat-form-field>
+                    <ngx-material-timepicker #fulltime1></ngx-material-timepicker>
+                    <mat-form-field style="width: 100%;" appearance="outline">
+                        <mat-label>{{t('Certificate Validity Warning(In Months)')}}</mat-label>
+                        <input matInput formControlName="certificateWarning" type="number" [min]="0">
+                    </mat-form-field>
+                    
+                    <mat-radio-group aria-label="Select an option" formControlName="active">
+                        <mat-radio-button [value]=true>{{t('Active')}}</mat-radio-button>
+                        <mat-radio-button class="ml-6" [value]=false>{{t('Cancel')}} </mat-radio-button>
+                    </mat-radio-group>    
+                </div>
+            </form>
+
+        </mat-dialog-content>
+        <div mat-dialog-actions fxLayoutAlign="end center" class="m-0 p-6 " fxLayout="row">
+           
+            <button (click)="CourseForm.reset()"  matTooltip="{{t('RESET')}}" aria-label="Reset" mat-raised-button class="mr-4">
+              <span>{{t('CLEAR')}}</span>
+            </button>
+            <button [disabled]="!CourseForm.valid||CourseForm.get('courseName').value.trim() === ''|| CourseForm.get('userId').value=='' || CourseForm.get('startDate').value=='' || CourseForm.get('startTime').value=='' " type="submit" (click)="submit(CourseForm)"  mat-raised-button color="accent" aria-label="Submit"
+              matTooltip="{{t('SUBMIT')}}"><span>{{t('SUBMIT')}}</span></button>
+           
+        </div>
+    </mat-sidenav>
+    </mat-sidenav-container>
+    
+    <ng-template #content>
+        <h2 mat-dialog-title *transloco="let t; read: 'COURSE'" >{{t('Delete Confirmation')}}</h2>
+        <div class="modal-header">
+            <a href="javascript:void(0);" class="right_note" (click)="modalReference.hide()"  style="color:#dc3545"><i class="fa fa-close"></i></a>
+        </div>
+        <div class="modal-body" *transloco="let t; read: 'COURSE'">
+            <p>{{t('Are you sure you want to delete this record?')}}</p>
+        </div>
+        <div class="col lg-12" *transloco="let t; read: 'COURSE'">
+            <br>
+            <button (click)="DeleteCourse();modalReference.close()"  mat-flat-button="" matdialogclose="" mat-raised-button color="accent" style="float: right;"
+                class="mdc-button mdc-button--unelevated mat-mdc-unelevated-button mat-unthemed mat-mdc-button-base"
+                type="button"><span class="mat-mdc-button-persistent-ripple mdc-button__ripple"></span><span
+                    class="mdc-button__label"> {{t('Delete')}} </span><span
+                    class="mat-mdc-focus-indicator"></span><span matripple=""
+                    class="mat-ripple mat-mdc-button-ripple"></span><span
+                    class="mat-mdc-button-touch-target"></span></button>
+
+
+            <button (click)="modalReference.close()" _ngcontent-iac-c131="" mat-raised-button=""
+                mat-flat-button="" matdialogclose="" type="button"
+                class="mat-focus-indicator mdc-button mdc-button--unelevated mat-mdc-unelevated-button mat-unthemed mat-mdc-button-base mat-flat-button mat-raised-button mat-button-base"
+                style="float: right;margin-right: 20px;"><span class="mat-button-wrapper"><span
+                        _ngcontent-iac-c131=""
+                        class="mat-mdc-button-persistent-ripple mdc-button__ripple"></span><span
+                        _ngcontent-iac-c131="" class="mdc-button__label"> {{t('Cancel')}} </span><span
+                        _ngcontent-iac-c131="" class="mat-mdc-focus-indicator"></span><span
+                        _ngcontent-iac-c131="" matripple=""
+                        class="mat-ripple mat-mdc-button-ripple"></span><span _ngcontent-iac-c131=""
+                        class="mat-mdc-button-touch-target"></span></span><span matripple=""
+                    class="mat-ripple mat-button-ripple" ng-reflect-disabled="false" ng-reflect-centered="false"
+                    ng-reflect-trigger="[object HTMLButtonElement]"></span></button>
+
+            <br>
+            <br>
+
+        </div>
+    
+    </ng-template>

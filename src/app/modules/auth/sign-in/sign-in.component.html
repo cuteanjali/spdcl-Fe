@@ -1,0 +1,105 @@
+<div class="flex flex-col sm:flex-row items-center md:items-start sm:justify-center md:justify-start flex-auto min-w-0 ovrflwo-cls"
+    style="overflow: hidden !important;">
+    <div
+        class="md:flex md:items-center md:justify-end w-full sm:w-auto md:h-full md:w-1/2 py-8 px-4 sm:p-12 md:p-16 sm:rounded-2xl md:rounded-none sm:shadow md:shadow-none sm:bg-card ng-tns-c199-27">
+        <div class="w-full max-w-80 sm:w-80 mx-auto sm:mx-0" *transloco="let t; read: 'HOME'">
+            <!-- Logo -->
+            <div class="w-12" style="width: 4rem !important;">
+                <img src="assets/images/logo/SBPDCL_logo.gif">
+            </div>
+
+            <!-- Title -->
+            <div class="mt-8 text-4xl font-extrabold tracking-tight leading-tight">{{t('SIGNIN')}}</div>
+            <!-- <div class="flex items-baseline mt-0.5 font-medium">
+                <div>Don't have an account?</div>
+                <a
+                    class="ml-1 text-primary-500 hover:underline"
+                    [routerLink]="['/sign-up']">Sign up
+                </a>
+            </div> -->
+
+            <!-- Alert -->
+            <fuse-alert class="mt-8 -mb-4" *ngIf="showAlert" [appearance]="'outline'" [showIcon]="false"
+                [type]="alert.type" [@shake]="alert.type === 'error'">
+                {{alert.message}}
+            </fuse-alert>
+
+            <!-- Sign in form -->
+            <form class="mt-8" [formGroup]="signInForm" #signInNgForm="ngForm">
+
+                <!-- Email field -->
+                <mat-form-field class="w-full">
+                    <mat-label>{{t('EMAILADDRESS')}}</mat-label>
+                    <input id="email" matInput [formControlName]="'email'">
+                    <mat-error *ngIf="signInForm.get('email').hasError('required')">
+                        {{t('EMAIL1')}}
+                    </mat-error>
+                    <mat-error *ngIf="signInForm.get('email').hasError('email')">
+                        {{t('EMAILVALID')}}
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Password field -->
+                <mat-form-field class="w-full">
+                    <mat-label>{{t('PASSWPRD')}}</mat-label>
+                    <input id="password" matInput type="password" [formControlName]="'password'" #passwordField>
+                    <button mat-icon-button type="button"
+                        (click)="passwordField.type === 'password' ? passwordField.type = 'text' : passwordField.type = 'password'"
+                        matSuffix>
+                        <mat-icon class="icon-size-5" *ngIf="passwordField.type === 'password'"
+                            [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                        <mat-icon class="icon-size-5" *ngIf="passwordField.type === 'text'"
+                            [svgIcon]="'heroicons_solid:eye-off'"></mat-icon>
+                    </button>
+
+                    <mat-error>
+                        {{t('PASS1')}}
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Actions -->
+                <div class="inline-flex items-end justify-between w-full mt-1.5">
+                    <!-- <mat-checkbox
+                        [color]="'primary'"
+                        [formControlName]="'rememberMe'">
+                        Remember me
+                    </mat-checkbox> -->
+                    <!-- <a
+                        class="text-md font-medium text-primary-500 hover:underline"
+                        [routerLink]="['/forgot-password']">Forgot password?
+                    </a> -->
+                </div>
+
+
+
+
+                <!-- Submit button -->
+                <button style="background: #314f60; color: white;" class="fuse-mat-button-large w-full mt-6"
+                     mat-flat-button [color]="'primary'" [disabled]="signInForm.disabled"
+                    (click)="signIn()">
+                    <span *ngIf="!signInForm.disabled">
+                        {{t('SIGNIN')}}
+                    </span>
+                    <mat-progress-spinner *ngIf="signInForm.disabled" [diameter]="24"
+                        [mode]="'indeterminate'"></mat-progress-spinner>
+                </button>
+
+                <!-- <button style="background: #941C3C; color: white;" class="fuse-mat-button-large w-full mt-6"
+                    *ngIf="IsMultipleOrg" mat-flat-button [color]="'primary'" [disabled]="signInForm.disabled"
+                    (click)="setOrgAndForward(signInForm.controls['orgId'].value)">
+                    <span *ngIf="!signInForm.disabled">
+                        {{t('SIGNIN')}}
+                    </span>
+                    <mat-progress-spinner *ngIf="signInForm.disabled" [diameter]="24"
+                        [mode]="'indeterminate'"></mat-progress-spinner>
+                </button> -->
+            </form>
+        </div>
+    </div>
+    <div
+        class="relative hidden md:flex flex-auto items-center justify-center w-1/2 h-full p-16 lg:px-28 overflow-hidden bg-gray-800 dark:border-l ng-tns-c199-27">
+        ">
+
+        <img style="position: absolute;" class="" src="assets/images/logo/bgslogo.png">
+    </div>
+</div>

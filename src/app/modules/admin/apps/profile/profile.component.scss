@@ -1,0 +1,17 @@
+.mat-form-field.mat-form-field-appearance-fill .mat-form-field-wrapper .mat-form-field-flex {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    min-height: 46px !important;
+    min-width: 240px;
+    border-radius: 24px;
+    padding: 0 16px;
+    border-width: 1px;
+    --tw-border-opacity: 1 !important;
+    border-color: rgb(203 213 225/var(--tw-border-opacity)) !important;
+    --tw-bg-opacity: 1 !important;
+    background-color: rgb(255 255 255/var(--tw-bg-opacity)) !important;
+    --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05) !important;
+    --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color) !important;
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 rgba(0, 0, 0, 0)), var(--tw-ring-shadow, 0 0 rgba(0, 0, 0, 0)), var(--tw-shadow) !important;
+}

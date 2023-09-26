@@ -1,0 +1,170 @@
+
+
+<div class="w-full max-w-3xl" *transloco="let t; read: 'PROFILE'">
+
+    <!-- Form -->
+    <form [formGroup]="planBillingForm">
+
+        <!-- Section -->
+        <div *ngIf="togglebutton">
+        <div class="w-full">
+            <div class="text-xl">{{t('Choose your plan')}}</div>
+        </div>
+
+        <mat-slide-toggle [ngModelOptions]="{standalone: true}" [(ngModel)]="value"  (change)="changed()"></mat-slide-toggle>
+        <div *ngIf="!value"> <b>{{t('Individual License')}}</b></div>
+        <div *ngIf="value"> <b>{{t('Enterprise License')}}</b></div>
+        </div>
+        <span  *ngIf="expiredDateuser && orgdate" class="title dialog-title"><b>{{EnterpriseNote}} {{expiredDateuser| date:"dd-MM-yyyy"}}</b></span>
+        <span *ngIf="expiredDateuser && userdate" class="title dialog-title"><b>{{UserNote}} {{expiredDateuser| date:"dd-MM-yyyy"}}</b></span>
+        <div *ngIf="showSubscription" class="grid sm:grid-cols-3 gap-6 w-full mt-8">
+        
+            <!-- Plan -->
+            <!-- <div class="sm:col-span-3">
+                <fuse-alert
+                    [appearance]="'outline'"
+                    [type]="'info'">
+                    Changing the plan will take effect immediately. You will be charged for the rest of the current month.
+                </fuse-alert>
+            </div> -->
+            <mat-radio-group
+                class="invisible absolute w-0 h-0 pointer-events-none"
+                [formControlName]="'plan'"
+                #planRadioGroup="matRadioGroup">
+                <ng-container *ngFor="let plan of subsriptionlist; trackBy: trackByFn">
+                    <mat-radio-button [value]="plan.value"></mat-radio-button>
+                </ng-container>
+            </mat-radio-group>
+            <ng-container *ngFor="let plan of subsriptionlist; trackBy: trackByFn">
+                <div
+                    class="relative flex flex-col items-start justify-start p-6 rounded-md shadow cursor-pointer bg-card"
+                    [ngClass]="{'ring ring-inset ring-primary': planRadioGroup.value === plan.value}"
+                    (click)="planRadioGroup.value = plan.value; selectSubType(plan)">
+                    <ng-container *ngIf="planRadioGroup.value === plan.value">
+                        <mat-icon
+                            class="absolute top-0 right-0 mt-4 mr-3 icon-size-4 text-primary"
+                            [svgIcon]="'heroicons_solid:check-circle'"></mat-icon>
+                    </ng-container>
+                    <div class="font-medium">{{plan.label}}</div>
+                    <div class="mt-1 whitespace-normal text-secondary">{{plan.details}}</div>
+                    <div class="flex-auto"></div>
+                    <div class="mt-8 text-lg">
+                        <span> € {{plan.price}}</span>
+                    </div>
+                </div>
+            </ng-container>
+
+            
+       
+        </div>
+        
+        <!-- Divider -->
+        <div class="mt-12 mb-10 border-t"></div>
+        <div *ngIf="subscriptiondate" class="row">
+        <div class="w-full">
+            <div class="text-xl">{{t('Subscription Date')}}</div>
+        </div>
+        <mat-form-field style="width: 70%;" appearance="outline">
+            <mat-label>{{t('Subscription Date')}} </mat-label>
+            <input matInput [matDatepicker]="date1" [min]="todayDate" formControlName="subStartedOn">
+            <mat-datepicker-toggle matSuffix [for]="date1">
+            </mat-datepicker-toggle>
+            <mat-datepicker #date1></mat-datepicker>
+        </mat-form-field>
+        </div>
+        <!-- Section -->
+        <div class="w-full">
+            <div class="text-xl">{{t('Payment Details')}}</div>
+            <div class="text-secondary">{{t('Update your billing information')}}</div>
+        </div>
+        <div class="grid grid-cols-4 gap-6 w-full mt-8">
+            <!-- Card holder -->
+            <div class="col-span-4">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label>{{t('Card holder')}}</mat-label>
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_solid:user'"
+                        matPrefix></mat-icon>
+                    <input
+                        [formControlName]="'cardHolder'"
+                        matInput>
+                </mat-form-field>
+            </div>
+            <!-- Card number -->
+            <div class="col-span-4 sm:col-span-2">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label>{{t('Card number')}}</mat-label>
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_solid:credit-card'"
+                        matPrefix></mat-icon>
+                    <input
+                        [formControlName]="'cardNumber'"
+                        matInput>
+                </mat-form-field>
+            </div>
+            <!-- Card expiration -->
+            
+            <div class="col-span-4 sm:col-span-2">
+                <mat-form-field
+                    class="fuse-mat-no-subscript w-full"
+                    [floatLabel]="'always'">
+                    <mat-label>{{t('Expiration date')}}</mat-label>
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_solid:calendar'"
+                        matPrefix></mat-icon>
+                    <input
+                        [formControlName]="'cardExpiration'"
+                        [placeholder]="'MM / YY'"
+                        matInput>
+                </mat-form-field>
+            </div>
+            <!-- Card CVC -->
+            <div class="col-span-4 sm:col-span-2">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label>CVC / CVC2</mat-label>
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_solid:lock-closed'"
+                        matPrefix></mat-icon>
+                    <input
+                        [formControlName]="'cardCVC'"
+                        matInput>
+                </mat-form-field>
+            </div>
+            <!-- ZIP -->
+            <div class="col-span-4 sm:col-span-2">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label>{{t('ZIP / Postal code')}}</mat-label>
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_solid:hashtag'"
+                        matPrefix></mat-icon>
+                    <input matInput>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="mt-11 mb-10 border-t"></div>
+
+        <!-- Actions -->
+        <div class="flex items-center justify-end">
+            <button
+                mat-stroked-button
+                type="button">
+                {{t('Cancel')}}
+            </button>
+            <button
+                class="ml-4"
+                mat-flat-button
+                [disabled]="!planBillingForm.valid"
+                type="button" (click)="submitModalForSubscription(planBillingForm)"
+                [color]="'primary'">{{t('Save')}}
+            </button>
+        </div>
+    </form>
+
+</div>

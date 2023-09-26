@@ -1,0 +1,260 @@
+
+
+<mat-sidenav-container fullscreen [hasBackdrop]="false" *transloco="let t; read: 'WORKTYPE'">
+    <div class="relative flex flex-col flex-auto min-w-0 overflow-hidden">
+    
+        <!-- Header -->
+    
+        <div class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-3 sm:px-10 border-b bg-card dark:bg-transparent">
+            <div class="flex-1 min-w-0">
+                <!-- Breadcrumbs -->
+              
+                <!-- Title -->
+                
+                <div class="mt-2">
+                    <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+              Session Tariff
+                    </h2>
+                </div>
+            </div>
+            <div class="flex items-center justify-end">
+                <div class="example-header">
+                    <mat-form-field>
+                        <mat-icon>search</mat-icon>
+                      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="{{t('SEARCH')}}">
+                    </mat-form-field>
+                  </div>
+            </div> 
+    
+            <button mat-flat-button="" type="button" (click)="sidenav.toggle();addDialog()"
+            class="mat-focus-indicator ml-4 mat-flat-button mat-button-base mat-primary" style="background: #314f60;"><span
+                class="mat-button-wrapper"> <mat-icon class="material-icons">
+                    add
+                </mat-icon>  Add Tariff </span>
+            
+        </button>
+        </div>
+    
+        <!-- Header & Cards -->
+        <div class="relative pb-12 sm:pt-0 sm:pb-2 px-6 sm:px-6 overflow-hidden">
+            
+            <!-- Card -->
+            <div class="flex flex-col items-center mt-10 sm:mt-5">
+                <fuse-card class="flex-col lg:flex-row w-full lg:max-w-7xl overflow-x-auto overflow-y-hidden">
+                  
+                    <div class="grid grid-flow-col lg:grid-flow-row min-w-max lg:min-w-0 divide-x lg:divide-x-0 lg:divide-y"
+                        style="width: 100%">
+    
+                        <div class="example-loading-shade" style="margin: auto;margin-top: 50px;" *ngIf="loading">
+                            <mat-spinner *ngIf="loading" class="orange-spinner"></mat-spinner>
+                            
+                        </div>
+                        <div class="mat-elevation-z8">
+    
+                        <!-- <div  *ngIf="(data1 | async) as dataLoaded ">  -->
+                            <table mat-table [dataSource]="dataSource" style="width: 100%" matSort matSortActive="session"
+                            matSortDisableClear matSortDirection="desc" (matSortChange)="applySort($event)">
+    
+                            <ng-container matColumnDef="session">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Session</th>
+                                <td matTooltip ="{{element.session}}" mat-cell *matCellDef="let element"> 
+                                    {{element.session}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="tariffType">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Tariff Type</th>
+                                <td matTooltip ="{{element.tariffType}}" mat-cell *matCellDef="let element"> 
+                                    {{element.tariffType}}
+                                </td>
+                            </ng-container>
+
+                                <ng-container matColumnDef="tariffValue">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Fixed Charge</th>
+                                    <td matTooltip ="{{element.tariffValue}}" mat-cell *matCellDef="let element"> 
+                                        {{element.tariffValue}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="appAmnt">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Application Fee</th>
+                                    <td matTooltip ="{{element.appAmnt}}" mat-cell *matCellDef="let element"> 
+                                        {{element.appAmnt}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="meterRemovingAmnt">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Meter Removing Fee</th>
+                                    <td matTooltip ="{{element.meterRemovingAmnt}}" mat-cell *matCellDef="let element"> 
+                                        {{element.meterRemovingAmnt}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="disconnectionAmnt">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Disconnection Fee</th>
+                                    <td matTooltip ="{{element.disconnectionAmnt}}" mat-cell *matCellDef="let element"> 
+                                        {{element.disconnectionAmnt}}
+                                    </td>
+                                </ng-container>
+    
+                                <ng-container matColumnDef="status">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                                    <td matTooltip ="{{element.status}}" mat-cell *matCellDef="let element"> {{element.status}} </td>
+                                </ng-container>
+    
+    
+                                <!-- <ng-container matColumnDef="status">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                                    <td mat-cell *matCellDef="let element"> {{element.active}} </td>
+                                </ng-container> -->
+    
+    
+                                <ng-container matColumnDef="action">
+                                    <th mat-header-cell *matHeaderCellDef>{{t('Action')}}</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <button matTooltip="{{t('Edit')}}" style="color: #314f60;" data-toggle="tooltip" data-placement="bottom" (click)="sidenav.open();editdialog(element)"
+                                            class="Edit"><span class="mat-button-wrapper"><mat-icon role="img" class="mat-icon notranslate text-blue-600 mat-icon-no-color" aria-hidden="true" data-mat-icon-type="svg" data-mat-icon-name="pencil-alt" data-mat-icon-namespace="heroicons_outline">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#314f60" fit="" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" focusable="false">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                        </svg></mat-icon></span>
+                                        </button>
+                                        &nbsp;
+                                    <button matTooltip="{{t('Delete')}}" (click)="openSubPopUp(content,element.id)" style="color: #941C3C;"><i class="material-icons">delete</i></button>
+                                    
+                                    </td>
+                                </ng-container>
+    
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            </table>
+                            <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[10, 25, 100]"
+                            (page)="getPageDetails($event)">
+                            </mat-paginator>
+                        </div>
+                        <!-- </div> -->
+    
+                    </div>
+                </fuse-card>
+            </div>
+        </div>
+    
+    </div>
+    <mat-sidenav #sidenav mode="over" backdrop="false" class="example-sidenav" [ngStyle]="{ 'width.%': sidenavWidth }"
+        opened="false" position="end">
+        <!-- Form Title -->
+        <mat-toolbar class="mat-accent m-0 mail-compose-dialog">
+            <mat-toolbar-row fxFlex fxLayout="row" fxLayoutAlign="space-between center" style="background: #314f60;color: white;">
+                <span class="title dialog-title">{{title}}</span>
+                <div class="flex items-center pl-2 ml-auto space-x-0.5 sm:space-x-2">
+                    <button mat-icon-button (click)="sidenav.toggle();" aria-label="Close dialog">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </div>
+            </mat-toolbar-row>
+        </mat-toolbar>
+  
+        <mat-dialog-content class="m-0 form formGroup h-auto" fusePerfectScrollbar>
+
+            <form [formGroup]="WorktypeForm" fxFlex class="event-form w-100-p">
+                <div fxLayout="column" class="p-20" style="padding: 1rem !important;">
+
+                    <mat-form-field style="width: 70%" appearance="outline">
+                        <mat-label>Select Tariff Session</mat-label>
+                        <mat-select formControlName="languageType">
+                            <mat-option *ngFor="let item of availableLang"
+                            [value]="item.label" >{{item.label}}</mat-option>
+                        </mat-select>
+                        <mat-error></mat-error>
+                    </mat-form-field>&nbsp;&nbsp;
+
+                    <mat-form-field style="width: 70%" appearance="outline">
+                        <mat-label>Select Tariff</mat-label>
+                        <mat-select formControlName="tariffType">
+                            <mat-option *ngFor="let item1 of availabletariffType"
+                            [value]="item1.label" >{{item1.label}}</mat-option>
+                        </mat-select>
+                        <mat-error></mat-error>
+                    </mat-form-field>&nbsp;&nbsp;
+
+                    <mat-form-field style="width: 70%;" appearance="outline">
+                        <mat-label>Fixed Amount</mat-label>
+                        <input matInput formControlName="tariffValue" type="number">
+                        <mat-error>
+                        </mat-error>
+                    </mat-form-field>&nbsp;&nbsp;  
+
+                    <mat-form-field style="width: 70%;" appearance="outline">
+                        <mat-label>Application Amount</mat-label>
+                        <input matInput formControlName="appAmnt" type="number">
+                        <mat-error>
+                        </mat-error>
+                    </mat-form-field>&nbsp;&nbsp; 
+
+                    <mat-form-field style="width: 70%;" appearance="outline">
+                        <mat-label>Meter Removing Amount</mat-label>
+                        <input matInput formControlName="meterRemovingAmnt" type="number">
+                        <mat-error>
+                        </mat-error>
+                    </mat-form-field>&nbsp;&nbsp; 
+
+                    <mat-form-field style="width: 70%;" appearance="outline">
+                        <mat-label>Disconnection Amount</mat-label>
+                        <input matInput formControlName="disconnectionAmnt" type="number">
+                        <mat-error>
+                        </mat-error>
+                    </mat-form-field>&nbsp;&nbsp; 
+
+                </div>
+            </form>
+
+        </mat-dialog-content>
+        <div mat-dialog-actions fxLayoutAlign="end center" class="m-0 p-6 " fxLayout="row">
+           
+            <button (click)="WorktypeForm.reset()"  matTooltip="Reset" aria-label="Reset" mat-raised-button class="mr-4">
+              <span>{{t('CLEAR')}}</span>
+            </button>
+            <button (click)="submit(WorktypeForm)"  mat-raised-button color="accent" aria-label="Submit"
+              matTooltip="Submit"><span>{{t('SUBMIT')}}</span></button>
+           
+        </div>
+    </mat-sidenav>
+    </mat-sidenav-container>
+    
+    
+    <ng-template #content>
+        <h2 mat-dialog-title *transloco="let t; read: 'COURSE'">{{t('Delete Confirmation')}}</h2>
+        <div class="modal-header">
+            <a href="javascript:void(0);" class="right_note" (click)="modalReference.close()"  style="color:#314f60"><i class="fa fa-close"></i></a>
+        </div>
+        <div class="modal-body" *transloco="let t; read: 'COURSE'">
+            <p>{{t('Are you sure you want to delete this record?')}}</p>
+        </div>
+        <div class="col lg-12" *transloco="let t; read: 'COURSE'">
+            <br>
+            <button (click)="DeleteWorkType();modalReference.close()"  mat-flat-button="" matdialogclose="" mat-raised-button color="accent" style="float: right;"
+                class="mdc-button mdc-button--unelevated mat-mdc-unelevated-button mat-unthemed mat-mdc-button-base"
+                type="button"><span class="mat-mdc-button-persistent-ripple mdc-button__ripple"></span><span
+                    class="mdc-button__label"> {{t('Delete')}} </span><span
+                    class="mat-mdc-focus-indicator"></span><span matripple=""
+                    class="mat-ripple mat-mdc-button-ripple"></span><span
+                    class="mat-mdc-button-touch-target"></span></button>
+    
+    
+            <button (click)="modalReference.close()" _ngcontent-iac-c131="" mat-raised-button=""
+                mat-flat-button="" matdialogclose="" type="button"
+                class="mat-focus-indicator mdc-button mdc-button--unelevated mat-mdc-unelevated-button mat-unthemed mat-mdc-button-base mat-flat-button mat-raised-button mat-button-base"
+                style="float: right;margin-right: 20px;"><span class="mat-button-wrapper"><span
+                        _ngcontent-iac-c131=""
+                        class="mat-mdc-button-persistent-ripple mdc-button__ripple"></span><span
+                        _ngcontent-iac-c131="" class="mdc-button__label"> {{t('Cancel')}} </span><span
+                        _ngcontent-iac-c131="" class="mat-mdc-focus-indicator"></span><span
+                        _ngcontent-iac-c131="" matripple=""
+                        class="mat-ripple mat-mdc-button-ripple"></span><span _ngcontent-iac-c131=""
+                        class="mat-mdc-button-touch-target"></span></span><span matripple=""
+                    class="mat-ripple mat-button-ripple" ng-reflect-disabled="false" ng-reflect-centered="false"
+                    ng-reflect-trigger="[object HTMLButtonElement]"></span></button>
+    
+            <br>
+            <br>
+    
+        </div>
+    
+    </ng-template>

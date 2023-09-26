@@ -1,0 +1,187 @@
+<div class="relative flex flex-col flex-auto min-w-0 overflow-hidden" *transloco="let t; read: 'EXAMRESULT'">
+
+    <!-- Header -->
+
+    <div
+        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-3 sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 min-w-0">
+            <!-- Breadcrumbs -->
+
+            <!-- Title -->
+
+            <div class="mt-2">
+
+                <h2>
+                   
+
+                    <!-- <span mat-icon-button class="material-icons" (click)="handleBack()">arrow_circle_left</span> -->
+                </h2>
+
+                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                    <button mat-icon-button (click)="handleBack()">
+                        <mat-icon>arrow_circle_left</mat-icon>
+                    </button>
+                    <span *ngIf="dataSet!=null" matTooltip ="{{titlehead1}}"> {{titlehead1}}</span>  
+                </h2>
+            </div>
+        </div>
+        <div class="flex items-center justify-end">
+            <div class="example-header">
+                <mat-form-field>
+                    <mat-icon>search</mat-icon>
+                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="{{t('SEARCH')}}">
+                </mat-form-field>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- Header & Cards -->
+    <div class="relative pb-12 sm:pt-0 sm:pb-2 px-6 sm:px-6 overflow-hidden">
+
+        <!-- Card -->
+        <div class="flex flex-col items-center mt-10 sm:mt-5">
+            <fuse-card class="flex-col lg:flex-row w-full lg:max-w-7xl overflow-x-auto overflow-y-hidden">
+
+                <div class="grid grid-flow-col lg:grid-flow-row min-w-max lg:min-w-0 divide-x lg:divide-x-0 lg:divide-y"
+                    style="width: 100%">
+                    
+                    <div class="example-loading-shade" style="margin: auto;margin-top: 40px;" *ngIf="loading">
+                        <mat-spinner *ngIf="loading" class="orange-spinner"></mat-spinner>
+                        
+                    </div>
+
+                    <div class="mat-elevation-z8">
+                    <form 
+                        [formGroup]="selectedProductForm">
+                       
+                     
+                        <table mat-table [dataSource]="dataSource" multiTemplateDataRows style="width: 100%" matSort matSortActive="userName"
+                        matSortDisableClear matSortDirection="desc" (matSortChange)="applySort($event)">
+
+                            <!-- <ng-container matColumnDef="srno">
+                               <th mat-header-cell *matHeaderCellDef >#</th>
+                               <td  mat-cell *matCellDef="let element; let i = index;">{{i+1}} </td>
+                            </ng-container> -->
+
+                            <ng-container matColumnDef="userName">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{t('Name')}}</th>
+                                <td mat-cell *matCellDef="let element"> {{element.userName}} </td>
+                            </ng-container>
+
+
+                            <ng-container matColumnDef="examStrId">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{t('Exam Id')}}</th>
+                                <td mat-cell *matCellDef="let element"> {{element.examStrId}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="enrollmentStrId">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{t('Enrollment Id')}}</th>
+                                <td mat-cell *matCellDef="let element"> {{element.enrollmentStrId}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="examStatus">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{t('Result Status')}}</th>
+                                <td mat-cell *matCellDef="let element"> {{element.result}} </td>
+                            </ng-container>
+                            
+
+
+                            <ng-container matColumnDef="expandedDetail">
+                                <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                                    <div class="example-element-detail"
+                                        [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+
+                                        <table mat-table [dataSource]="element.stuExamResultMarksBeans"
+                                            style="width: 100%">
+
+                     
+                                            <ng-container matColumnDef="position">
+                                                <th mat-header-cell *matHeaderCellDef ># </th>
+                                                <td mat-cell *matCellDef="let element; let i = index;">{{i+1}} </td>
+                                            </ng-container>
+
+              
+                                            <ng-container matColumnDef="totalQsn">
+                                                <th mat-header-cell *matHeaderCellDef >{{t('Total Questions')}}
+                                                </th>
+                                                <td mat-cell *matCellDef="let element">{{element.totalQsn}} </td>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="skippedQsn">
+                                                <th mat-header-cell *matHeaderCellDef >{{t('Total Skipped Questions')}}
+                                                </th>
+                                                <td mat-cell *matCellDef="let element">{{element.skippedQsn}} </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="correctAns">
+                                                <th mat-header-cell *matHeaderCellDef >{{t('Total Correct Answer')}}
+                                                </th>
+                                                <td mat-cell *matCellDef="let element">{{element.correctAns}} </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="incorrectAns">
+                                                <th mat-header-cell *matHeaderCellDef >{{t('Total Incorrect Answer')}} 
+                                                    Answer</th>
+                                                <td mat-cell *matCellDef="let element">{{element.incorrectAns}} </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="completionPer">
+                                                <th mat-header-cell *matHeaderCellDef >{{t('Percentage')}} </th>
+                                                <td mat-cell *matCellDef="let element">{{element.completionPer}} </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="examStatus1">
+                                                <th mat-header-cell *matHeaderCellDef >{{t('Result Status')}}</th>
+                                                <td mat-cell *matCellDef="let element">{{element.result}} </td>
+                                            </ng-container>
+                                            
+                                            <ng-container matColumnDef="action">
+                                                <th mat-header-cell *matHeaderCellDef>{{t('Action')}}</th>
+                                                <td mat-cell *matCellDef="let element">
+                                                  <button  [routerLink]="['/apps/exam-result/questionsview/'+element.id]" mat-icon-button matTooltip="{{t('View Questions Sheet')}}">
+                                                    <mat-icon
+                                                    class="icon-size-5 text-secondary"
+                                                    [svgIcon]="'heroicons_outline:document-text'"></mat-icon>
+                                                      
+                                                 <!-- <span class="ml-2 font-semibold">MARK AS COMPLETE</span> -->
+                                                </button>
+                                                <!-- <mat-slide-toggle
+                                                formControlName="'active'"
+                                                [color]="'primary'">
+                                                {{selectedProductForm.get('active').value === true ? 'Active' : 'Disabled'}}
+                                                </mat-slide-toggle> -->
+                
+                                                </td>
+                                                
+                                            </ng-container>
+                                            <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+                                            <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
+                                        </table>
+                    
+
+                                    </div>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+
+                            <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="example-element-row"
+                                [class.example-expanded-row]="expandedElement === element"
+                                (click)="expandedElement = expandedElement === element ? null : element">
+                            </tr>
+                            <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row">
+                        </table>
+
+
+
+                        <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[10, 25, 100]" (page)="getPageDetails($event)">
+                        </mat-paginator>
+                    </form>
+                    </div>
+
+                
+                </div>
+            </fuse-card>
+        </div>
+    </div>
+
+</div>

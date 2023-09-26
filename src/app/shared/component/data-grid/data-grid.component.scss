@@ -1,0 +1,91 @@
+.data-grid {
+    // grid-template-columns: 200px 300px 200px 200px 200px;
+    width: 100% !important;
+}
+
+.w-100 {
+    width: 100% !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mat-paginator .mat-paginator-container .mat-paginator-page-size .mat-paginator-page-size-select .mat-form-field-wrapper .mat-form-field-flex {
+    min-height: 32px;
+    padding: 0 10px;
+    min-width: 40px;
+    border-radius: 2px; 
+}
+
+.mat-table {
+    overflow-x: scroll;
+}
+
+.mat-row, .mat-header-row {
+    min-width: 800px;
+}
+.mat-row:hover {
+    cursor: auto;
+    --tw-bg-opacity: 1 !important;
+    background-color: none !important;
+}
+
+.grid-loading {
+    margin: auto;
+    margin-top: 50px;
+}
+
+.grid-loading-1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 56px;
+    right: 0;
+    background: rgb(255, 254, 254);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.text-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 90px;
+}
+
+.text-ellipsis-l {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 110px;
+}
+
+.mail-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 160px;
+}
+
+.btn-color-600 {
+    color: #941C3C !important;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.disabled {
+    opacity: 0.5 !important;
+}
+
+.no-data-found {
+    height: 50vh;
+    padding-top: 24vh;
+}

@@ -1,0 +1,252 @@
+
+
+<mat-sidenav-container fullscreen [hasBackdrop]="false">
+<div class="relative flex flex-col flex-auto min-w-0 overflow-hidden">
+
+    <!-- Header -->
+
+    <div class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-3 sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 min-w-0">
+            <!-- Breadcrumbs -->
+          
+            <!-- Title -->
+            
+            <div class="mt-2">
+                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                    {{'Seminars' | translate}}
+                </h2>
+            </div>
+        </div>
+        <div class="flex items-center justify-end">
+            <div class="example-header">
+                <mat-form-field>
+                    <mat-icon>search</mat-icon>
+                  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
+                </mat-form-field>
+              </div>
+        </div> 
+
+        <button mat-flat-button="" type="button" (click)="sidenav.toggle();addDialog()"
+        class="mat-focus-indicator ml-4 mat-flat-button mat-button-base mat-primary" style="background: #941C3C;"><span
+            class="mat-button-wrapper"> <mat-icon class="material-icons">
+                add
+            </mat-icon> {{'Add Seminar' | translate}} </span>
+        
+    </button>
+    </div>
+
+    <!-- <div
+        class="flex flex-col sm:flex-row flex-10 sm:items-center sm:justify-between p-6 sm:py-3 sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 min-w-0">
+           
+            <div class="mt-2">
+                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                    Seminars
+                </h2>
+            </div>
+        </div>
+        <div class="flex items-center justify-end">
+            <div class="example-header">
+                <mat-form-field>
+                    <mat-icon>search</mat-icon>
+                  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
+                </mat-form-field>
+              </div>
+        
+            
+                <button mat-flat-button="" type="button" (click)="sidenav.toggle();addDialog()"
+                    class="mat-focus-indicator ml-4 mat-flat-button mat-button-base mat-primary"><span
+                        class="mat-button-wrapper"> <mat-icon class="material-icons">
+                            add
+                        </mat-icon> Add Seminar </span><span matripple=""
+                        class="mat-ripple mat-button-ripple"></span><span
+                        class="mat-button-focus-overlay"></span>
+                    
+                </button>
+            
+        </div>
+    </div> -->
+
+    <!-- Header & Cards -->
+    <div class="relative pb-12 sm:pt-0 sm:pb-2 px-6 sm:px-6 overflow-hidden">
+
+        <!-- Background - @formatter:off -->
+        <svg class="-z-1 absolute inset-0" viewBox="0 0 960 540" width="100%" height="100%"
+            preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+            <g class="opacity-40 text-gray-200 dark:text-gray-800" fill="none" stroke="currentColor" stroke-width="100">
+                <circle r="234" cx="196" cy="23"></circle>
+                <circle r="234" cx="790" cy="491"></circle>
+            </g>
+        </svg>
+        <!-- @formatter:on -->
+        <!-- Header -->
+
+
+        <!-- Card -->
+        <div class="flex flex-col items-center mt-10 sm:mt-5">
+            <fuse-card class="flex-col lg:flex-row w-full lg:max-w-7xl overflow-x-auto overflow-y-hidden">
+
+
+                <div class="grid grid-flow-col lg:grid-flow-row min-w-max lg:min-w-0 divide-x lg:divide-x-0 lg:divide-y"
+                    style="width: 100%">
+
+
+                    <div class="mat-elevation-z8">
+
+                        <div class="mt-2">
+                            <h3
+                                class="text-3xl md:text-2xl items-center font-size tracking-tight leading-7 sm:leading-2 truncate">
+
+                            </h3>
+                        </div>
+
+                        <div class="container">
+
+
+                        </div>
+                        
+                        <table mat-table [dataSource]="dataSource" style="width: 100%" matSort>
+
+                            <ng-container matColumnDef="title">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Name' | translate}}</th>
+                                <td mat-cell *matCellDef="let element"> {{element.title}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="seminarId">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Seminar Id' | translate}}</th>
+                                <td mat-cell *matCellDef="let element"> {{element.seminarId}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="course">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Course' | translate}}</th>
+                                <td mat-cell *matCellDef="let element"> {{element.course}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="instructorName">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Instructor Name' | translate}}</th>
+                                <td mat-cell *matCellDef="let element"> {{element.instructorName}} </td>
+                            </ng-container>
+
+                            
+                            <ng-container matColumnDef="sessionStartOn">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Seminar Date' | translate}}</th>
+                                <td mat-cell *matCellDef="let element"> {{element.sessionStartOn | date:"dd-MM-yyyy"}}
+                                </td>
+                            </ng-container>
+
+
+<!--                         
+                            <ng-container matColumnDef="description">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+                                <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+                            </ng-container> -->
+
+                            <ng-container matColumnDef="status">
+                                <th mat-header-cell *matHeaderCellDef>{{'Status' | translate}}</th>
+                                
+                                <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+                             
+                            </ng-container>
+
+                            <ng-container matColumnDef="action">
+                                <th mat-header-cell *matHeaderCellDef>{{'Action' | translate}}</th>
+                                <td mat-cell *matCellDef="let element">
+                                    <button style="color: blue;" data-toggle="tooltip" data-placement="bottom" (click)="sidenav.open();editdialog(element)"
+                                        class="Edit"><span class="mat-button-wrapper"><mat-icon role="img" class="mat-icon notranslate text-blue-600 mat-icon-no-color" aria-hidden="true" data-mat-icon-type="svg" data-mat-icon-name="pencil-alt" data-mat-icon-namespace="heroicons_outline">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#941C3C" fit="" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" focusable="false">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                    </svg></mat-icon></span>
+                                    </button>&nbsp;
+                                    <button (click)="DeleteSeminar(element.id)" style="color: #941C3C;"><i class="material-icons">delete</i></button>
+                                    
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+                        <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[10, 25, 100]">
+                        </mat-paginator>
+                    </div>
+
+
+                </div>
+            </fuse-card>
+        </div>
+    </div>
+
+</div>
+    <mat-sidenav #sidenav mode="over" backdrop="false" class="example-sidenav" [ngStyle]="{ 'width.%': sidenavWidth }"
+        opened="false" position="end">
+        <!-- Form Title -->
+        <mat-toolbar class="mat-accent m-0 mail-compose-dialog">
+            <mat-toolbar-row fxFlex fxLayout="row" fxLayoutAlign="space-between center" style="background: #941C3C;color: white;">
+                <span class="title dialog-title">{{title}}</span>
+                <button mat-icon-button (click)="sidenav.toggle();" aria-label="Close dialog">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-toolbar-row>
+        </mat-toolbar>
+        <!-- Form Title -->
+        <!-- <div class="porfimage">
+  <img src="/assets/managemyunit/property-manager.png">
+</div> -->
+        <mat-dialog-content class=" pl-24 pr-24 pt-24 m-0 form formGroup h-auto" fusePerfectScrollbar>
+
+            <form [formGroup]="SeminarForm" fxFlex class="event-form w-100-p">
+                <div fxLayout="column" class="p-20" style="padding: 2rem !important;">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                        <mat-label>{{'Seminar Name' | translate}}</mat-label>
+                        <input matInput formControlName="title">
+                    </mat-form-field>
+
+                    <mat-form-field style="width: 100%" appearance="outline">
+                        <mat-label>{{'Course Name' | translate}}</mat-label>
+                        <mat-select formControlName="courseId">
+                            <mat-option *ngFor="let item of CourseList" [value]="item.id">{{item.courseName}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    
+
+                    <mat-form-field style="width: 100%" appearance="outline">
+                        <mat-label>{{'Instructor Name' | translate}}</mat-label>
+                        <mat-select formControlName="instructorId">
+                            <mat-option *ngFor="let item of Instructorlist" [value]="item.id">{{item.instructorName}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    
+                    <mat-form-field style="width: 100%;" appearance="outline">
+                        <mat-label>{{'Seminar Date' | translate}}</mat-label>
+                        <input matInput [matDatepicker]="date" formControlName="sessionStartOn">
+                        <mat-datepicker-toggle matSuffix [for]="date">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #date></mat-datepicker>         
+                    </mat-form-field>
+                   
+                    <mat-form-field style="width: 100%;" appearance="outline">
+                        <mat-label>{{'Description' | translate}}</mat-label>
+                        <input matInput formControlName="description">
+                    </mat-form-field>
+                    
+                    <mat-radio-group aria-label="Select an option" formControlName="active">
+                        <mat-radio-button [value]=true>{{'Active' | translate}}</mat-radio-button>
+                        <mat-radio-button class="ml-6" [value]=false>{{'Inactive' | translate}}</mat-radio-button>
+                      </mat-radio-group>
+                </div>
+            </form>
+
+        </mat-dialog-content>
+        <div mat-dialog-actions fxLayoutAlign="end center" class="m-0 p-6 " fxLayout="row">
+            <!-- Submit & Reset Button -->
+            <button (click)="SeminarForm.reset()"  matTooltip="Reset" aria-label="Reset" mat-raised-button class="mr-4">
+              <span>{{'CLEAR' | translate}}</span>
+            </button>
+            <button type="submit" (click)="submit(SeminarForm)"  mat-raised-button color="accent" aria-label="Submit"
+              matTooltip="Submit"><span>{{'SUBMIT' | translate}}</span></button>
+            <!-- Submit & Reset Button -->
+        </div>
+    </mat-sidenav>
+</mat-sidenav-container>
+

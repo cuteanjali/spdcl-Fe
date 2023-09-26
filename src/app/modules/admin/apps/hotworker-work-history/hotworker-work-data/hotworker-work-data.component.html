@@ -1,0 +1,129 @@
+<mat-sidenav-container fullscreen [hasBackdrop]="false" *transloco="let t; read: 'WORKTYPE'">
+    <div class="relative flex flex-col flex-auto min-w-0 overflow-hidden">
+    
+        <!-- Header -->
+    
+        <div class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-3 sm:px-10 border-b bg-card dark:bg-transparent">
+            <div class="flex-1 min-w-0">
+                <!-- Breadcrumbs -->
+              
+                <!-- Title -->
+                
+                <div class="mt-2">
+                    <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                        <button mat-icon-button (click)="handleBack()">
+                            <!-- <mat-icon>arrow_circle_left</mat-icon> -->
+                            <mat-icon svgIcon="heroicons_outline:arrow-circle-left" style="transform: scale(1.5);"></mat-icon>
+                            
+                              
+                        </button> {{t('Hot Worker Work Data')}} <span *ngIf="hotworkerData"> - {{hotworkerData.firstName}} &nbsp; {{hotworkerData.lastName}} </span>
+                    </h2>
+                </div>
+            </div>
+            <div class="flex items-center justify-end">
+            
+                <div class="example-header">
+                    <!-- <mat-form-field>
+                        <mat-icon>search</mat-icon>
+                      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="{{t('SEARCH')}}">
+                    </mat-form-field> -->
+                    <form [formGroup]="searchForm" fxFlex class="event-form w-100-p">
+                        <!-- <div fxLayout="column" class="p-20" style="padding: 1rem !important;"> -->
+                            <mat-form-field >
+                                
+                                <input matInput [matDatepicker]="date1" formControlName="searchDate" placeholder="{{t('SEARCH')}}" 
+                                (dateInput)="searchDate()" (click)="date1.open()" readonly>
+                                <mat-datepicker-toggle matSuffix [for]="date1">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker-toggle matSuffix (click)="clearWorkDate()">
+                                    <mat-icon matDatepickerToggleIcon>clear</mat-icon>
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #date1></mat-datepicker>
+                            </mat-form-field>
+                            <!-- <mat-icon (click)="searchDate()" style="cursor: pointer;" >search</mat-icon> -->
+                            <!-- <mat-icon svgIcon="heroicons_outline:x-circle" style="cursor: pointer;"></mat-icon> -->
+                        <!-- </div> -->
+                    </form>
+                  </div>
+            </div> 
+
+        </div>
+    
+        <!-- Header & Cards -->
+        <div class="relative pb-12 sm:pt-0 sm:pb-2 px-6 sm:px-6 overflow-hidden">
+            
+            <!-- Card -->
+            <div class="flex flex-col items-center mt-10 sm:mt-5">
+                <fuse-card class="flex-col lg:flex-row w-full lg:max-w-7xl overflow-x-auto overflow-y-hidden">
+                  
+                    <div class="grid grid-flow-col lg:grid-flow-row min-w-max lg:min-w-0 divide-x lg:divide-x-0 lg:divide-y"
+                        style="width: 100%">
+    
+                        <div class="example-loading-shade" style="margin: auto;margin-top: 30px;" *ngIf="loading">
+                            <mat-spinner *ngIf="loading" class="orange-spinner"></mat-spinner>        
+                        </div>
+                        <div class="mat-elevation-z8">
+
+                            <div *ngIf="data1">
+                                
+                                <table mat-table  [dataSource]="data1?.workData" style="width: 100%"  matSort matSortActive="firstName"
+                                matSortDisableClear matSortDirection="desc"
+                                >
+                                <ng-container matColumnDef="address">
+                                    <th id="content" mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Address</th>
+                                    <td matTooltip ="{{element.address}}"  mat-cell *matCellDef="let element">  
+
+                                        {{element.address}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="noOfFloor">
+                                    <th mat-header-cell *matHeaderCellDef >Floor Number</th>
+                                    <td matTooltip ="{{element.noOfFloor}}" mat-cell *matCellDef="let element"> {{element.noOfFloor}} </td>
+                                </ng-container>
+                                
+                                <ng-container matColumnDef="workDateStr">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Work Start Date
+                                    </th>
+                                    <td matTooltip="{{element.workDateStr}}"  mat-cell *matCellDef="let element"> {{element.workDateStr}} </td>
+                                </ng-container>
+                                <ng-container matColumnDef="workTimeStart">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Work Start Time
+                                    </th>
+                                    <td matTooltip="{{element.workTimeStart}}"  mat-cell *matCellDef="let element"> {{element.workTimeStart}} </td>
+                                </ng-container>
+                                <ng-container matColumnDef="action">
+                                    <th mat-header-cell *matHeaderCellDef>{{t('Action')}}</th>
+                                    <td mat-cell *matCellDef="let element">
+                                  
+                                   <button [disabled]="element.canDownloadWorkInstruction===false" [ngClass] = "{'disbaled-buttonsdown': element.canDownloadWorkInstruction===false}" (click)="Downloadhotworkerdata(element.workAddressId)" mat-icon-button matTooltip="{{t('Download Work Pdf')}}" >
+                                        <mat-icon svgIcon="heroicons_outline:document-download"></mat-icon>
+                                      </button>
+                                
+                                    </td>
+                                  </ng-container>
+
+                        
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            </table>
+                        </div>
+                            <!-- <span *ngIf="loading && !sortBool">
+                                <mat-spinner style="margin: auto;margin-top: 50px;" class="orange-spinner"></mat-spinner>
+                            </span>  -->
+
+                            <mat-paginator #paginator
+                            [length] = "resultsLength"
+                            [pageSize]="apirequest.pageSize"
+                                [pageSizeOptions]="[5,10, 25, 100]"
+                                (page)="getPageDetails($event)"
+                            ></mat-paginator>
+                        </div>
+                    </div>
+                </fuse-card>
+            </div>
+        </div>
+    
+    </div>
+    </mat-sidenav-container>
+    
+    
