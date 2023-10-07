@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { insturctionapp } from './instructionapp';
 import { MatSidenav } from '@angular/material/sidenav';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { InstructionService } from './instruction.service';
@@ -54,11 +54,19 @@ export class InstructionComponent {
   sessionTariffType: any;
   showTariff: boolean = false
   availablekbType = [];
+  sessionText = [];
+  selectedItems = new FormControl([]);
+  disconnectionAmnt : any;;
+ meterRemovingAmnt : any;;
+ appAmnt : any;
+
+ showTariffVlaue: boolean = false;
   // applyFilter(filterValue: string) {
   //   this.loading = true; 
   //   setTimeout(() => {
   //     filterValue = filterValue.trim(); // Remove whitespace
   //     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+      
   //     this.dataSource.filter = filterValue;
   //     this.loading = false; 
   //   }, 500);
@@ -67,12 +75,14 @@ export class InstructionComponent {
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   constructor(private _fb: FormBuilder, private _service: InstructionService, private _notificationService: NotificationService, private _matDialog: MatDialog,
     private translate: TranslateService, private _transloco: TranslocoService,
-    private _httpClient: HttpClient) { }
+    private _httpClient: HttpClient) {
+      
+     }
   @ViewChild(MatPaginator) private _paginator: MatPaginator;
 
 
   ngOnInit(): void {
-
+this.showTariffVlaue = false;
     this.isEnabled = true;
 
     this.availableLang = [
@@ -126,7 +136,7 @@ export class InstructionComponent {
       meter: ['', Validators.required],
       sessionTariff: ['', Validators.required],
       tariffType: [''],
-      tariffValue: ['', Validators.required],
+      tariffValue: [''],
       disconnectionAmnt: ['', Validators.required],
       meterRemovingAmnt: ['', Validators.required],
       appAmnt: ['', Validators.required],
@@ -134,7 +144,10 @@ export class InstructionComponent {
       dateDisconnection: [''],
       dateLastBill: [''],
       noDays: ['', Validators.required],
-
+      duesAmnt:['', Validators.required],
+      loadBal:['', Validators.required],
+      payAmnt:0,
+      securityAmnt:['']
     });
     this.Fetchlist();
 
@@ -152,16 +165,11 @@ export class InstructionComponent {
             this.loading = true;
             this._service.getAllDisconnection().subscribe(data => {
               if (data) {
-                console.log('=========',data)
                 this.dataSource = data.data;
                 this.totalRecordCount = data.data.length;
               }
-              console.log('======',this.totalRecordCount)
               this.loading = false;
             });
-         
-      
-     
     }catch(err){}
 
   }
@@ -188,7 +196,7 @@ export class InstructionComponent {
         columnName: 'dateConnection',
         columnTitleKey: 'dateConnection',
         columnValue: 'dateConnection',
-        type: this.columnType.TEXT_W_ELLIP_L,
+        type: this.columnType.DATE,
         show: true,
         sort: true,
       },
@@ -196,27 +204,34 @@ export class InstructionComponent {
         columnName: 'dateDisconnection',
         columnTitleKey: 'dateDisconnection',
         columnValue: 'dateDisconnection',
-        type: this.columnType.TEXT_W_ELLIP_L,
+        type: this.columnType.DATE,
         show: true,
         sort: true,
       },
       {
         columnName: 'dues',
         columnTitleKey: 'dues',
-        columnValue: 'dues',
+        columnValue: 'duesAmnt',
+        type: this.columnType.TEXT_W_ELLIP_L,
+        show: true,
+        sort: true,
+      },
+      {
+        columnName: 'securityAmt',
+        columnTitle: 'Security Amount',
+        columnValue: 'securityAmt',
         type: this.columnType.TEXT_W_ELLIP_L,
         show: true,
         sort: true,
       },
       {
         columnName: 'pay',
-        columnTitleKey: 'pay',
-        columnValue: 'pay',
+        columnTitle: 'Final Payable Amount',
+        columnValue: 'payAmnt',
         type: this.columnType.TEXT_W_ELLIP_L,
         show: true,
         sort: true,
       },
-      
       {
         columnName: 'edit',
         columnTitleKey: 'Action',
@@ -284,14 +299,16 @@ export class InstructionComponent {
 
   addDialog() {
     this.data = undefined;
-
+    this.showTariff = false;
+    this.selectedItems.setValue([]);
+    this.allSession=null;
     this.title = "Add Disconnection";
     this.WorktypeForm = this._fb.group({
       name: ['', Validators.required],
       meter: ['', Validators.required],
       sessionTariff: ['', Validators.required],
       tariffType: [''],
-      tariffValue: ['', Validators.required],
+      tariffValue: [''],
       disconnectionAmnt: ['', Validators.required],
       meterRemovingAmnt: ['', Validators.required],
       appAmnt: ['', Validators.required],
@@ -299,75 +316,61 @@ export class InstructionComponent {
       dateDisconnection: ['', Validators.required],
       dateLastBill: ['', Validators.required],
       noDays: ['', Validators.required],
+      duesAmnt:['', Validators.required],
+      loadBal:['', Validators.required],
+      payAmnt:0,
+      securityAmnt:['']
     });
   }
   closeScree() {
     this.isEnabled = true;
   }
-  addRow(user?: any): void {
-    this.isEnabled = false;
-    const lessonForm = this._fb.group({
-      descriptions: [user ? user.descriptions : ''],
-    });
-
-    (<FormArray>this.WorktypeForm.get('user')).push(lessonForm);
-  }
-  get DynamicFormControls() {
-    return <FormArray>this.WorktypeForm.get('user');
-  }
-  // delete dynamically created row with respect to indexing 
-  deleteRow(index: number): void {
-    if (index === 0) {
-      this.isEnabled = true;
-    } else {
-
-    }
-
-    (<FormArray>this.WorktypeForm.get('user')).removeAt(index);
-  }
+  
   editdialog(event) {
-    this.isEnabled = false;
+   
     this.data = event;
-    this.editMode = false;
-    this.edit = true
-    this.activeBool;
-    if (event.mandatory === true) {
-      this.activeBool = false;
-    } else {
-      this.activeBool = true;
-    }
     this.title = "Edit Disconnection"
+    this.showTariff = true;
+    this.selectedItems.setValue(event.session);
     this.WorktypeForm = this._fb.group({
-      languageType: event.languageType,
-      workTypeDesc: event.workTypeDesc,
-      //active: this.activeBool,
-      mandatory: event.mandatory,
-      descriptions: this._fb.array([])
+      name: event.name,
+      meter: event.meter,
+      tariffType:event.tariffType,
+      tariffValue: event.tariffValue,
+      disconnectionAmnt: event.disconnectionAmnt,
+      meterRemovingAmnt:event.meterRemovingAmnt,
+      appAmnt: event.appAmnt,
+      dateConnection: event.dateConnection,
+      dateDisconnection: event.dateDisconnection,
+      dateLastBill: event.dateLastBill,
+      noDays: event.noOfDays,
+      duesAmnt:event.duesAmnt,
+      loadBal:event.loadBal,
+      payAmnt :event.payAmnt,
+      securityAmnt:event.securityAmt
     });
   }
   submit(form) {
-    console.log("=============this.WorktypeForm.get('dateConnection').value====" + this.WorktypeForm.get('dateConnection').value);
-    console.log("============sessionTariff====" + this.WorktypeForm.get('sessionTariff').value);
-    let connectionDate = this.WorktypeForm.get('dateConnection').value;
-    let disconnectionDate = this.WorktypeForm.get('dateDisconnection').value;
-    let dateLastBill = this.WorktypeForm.get('dateLastBill').value;
-    let diffDate = disconnectionDate - connectionDate;
-    let totalDays = (diffDate / (24 * 60 * 60 * 1000));
-    this.WorktypeForm.controls.noDays.setValue(totalDays);
-    if (totalDays >= 365) {
-      if (dateLastBill < disconnectionDate) {
-
-      }
-    } else {
-
-    }
-    console.log("=========totalDays========" + totalDays);
-    
+  
     if (this.data === undefined) {
+      let connectionDate = this.WorktypeForm.get('dateConnection').value;
+      let disconnectionDate = this.WorktypeForm.get('dateDisconnection').value;
+      let dateLastBill = this.WorktypeForm.get('dateLastBill').value;
+      let diffDate = disconnectionDate - connectionDate;
+      let totalDays = (diffDate / (24 * 60 * 60 * 1000));
+      this.WorktypeForm.controls.noDays.setValue(totalDays);
+      if (totalDays >= 365) {
+        if (dateLastBill < disconnectionDate) {
+  
+        }
+      } else {
+  
+      }
       const object = {
+        id:"3fa85f64-0000-0000-0000-2c963f66afa6",
         name: this.WorktypeForm.get('name').value,
         meter: this.WorktypeForm.get('meter').value,
-        sessionTariff: this.WorktypeForm.get('sessionTariff').value,
+        session:  this.allSession,
         tariffType: this.WorktypeForm.get('tariffType').value,
         tariffValue: this.WorktypeForm.get('tariffValue').value,
         disconnectionAmnt: this.WorktypeForm.get('disconnectionAmnt').value,
@@ -376,23 +379,49 @@ export class InstructionComponent {
         dateConnection: this.WorktypeForm.get('dateConnection').value,
         dateDisconnection: this.WorktypeForm.get('dateDisconnection').value,
         dateLastBill: this.WorktypeForm.get('dateLastBill').value,
-        noDays: this.WorktypeForm.get('noDays').value,
+        noOfDays: this.WorktypeForm.get('noDays').value,
+        duesAmnt:this.WorktypeForm.get('duesAmnt').value,
+        loadBal:this.WorktypeForm.get('loadBal').value,
+        tenantCode:"spdcl",
+        payAmnt:this.WorktypeForm.get('payAmnt').value,
+        securityAmnt:this.WorktypeForm.get('securityAmnt').value,
       }
 
-      // this._service.SaveWorktypedes(object).subscribe((ele) => {
-      //   this._notificationService.successTopRight(this._transloco.translate('TERMSCONDITION.createmessage'));
-      //   this.Fetchlist();
-      //   this.adata = [];
-      //   this.isEnabled = true;
-      //   this.sidenav.close();
-      // });
+      this._service.saveDisconnection(object).subscribe((ele) => {
+        this._notificationService.successTopRight(this._transloco.translate('TERMSCONDITION.createmessage'));
+        this.Fetchlist();
+        this.adata = [];
+        this.isEnabled = true;
+        this.sidenav.close();
+      });
     } else {
-      // this._service.UpdateWorktypedes(prospectObj).subscribe((ele) => {
-      //   this._notificationService.successTopRight(this._transloco.translate('TERMSCONDITION.updatemessage'));
-      //   this.Fetchlist();
-      //   this.adata = []
-      //   this.sidenav.close();
-      // });
+      
+      const prospectObj = {
+        id:   this.data.id, 
+        name: this.WorktypeForm.get('name').value,
+        meter: this.WorktypeForm.get('meter').value,
+        session: this.allSession,
+        tariffType: this.WorktypeForm.get('tariffType').value,
+        tariffValue: this.WorktypeForm.get('tariffValue').value,
+        disconnectionAmnt: this.WorktypeForm.get('disconnectionAmnt').value,
+        meterRemovingAmnt: this.WorktypeForm.get('meterRemovingAmnt').value,
+        appAmnt: this.WorktypeForm.get('appAmnt').value,
+        dateConnection: this.WorktypeForm.get('dateConnection').value,
+        dateDisconnection: this.WorktypeForm.get('dateDisconnection').value,
+        dateLastBill: this.WorktypeForm.get('dateLastBill').value,
+        noOfDays: this.WorktypeForm.get('noDays').value,
+        duesAmnt:this.WorktypeForm.get('duesAmnt').value,
+        loadBal:this.WorktypeForm.get('loadBal').value,
+        payAmnt:this.WorktypeForm.get('payAmnt').value,
+        tenantCode:"spdcl",
+        securityAmnt:this.WorktypeForm.get('securityAmnt').value,
+      }
+      this._service.saveDisconnection(prospectObj).subscribe((ele) => {
+        this._notificationService.successTopRight(this._transloco.translate('TERMSCONDITION.updatemessage'));
+        this.Fetchlist();
+        this.adata = []
+        this.sidenav.close();
+      });
 
     }
   }
@@ -404,11 +433,11 @@ export class InstructionComponent {
   }
   deleteDisconnection() {
         this._service.deleteDisconnection(this.deletelement,{}).subscribe(data => {
-        if (data.status==='FAILED'){
+        if (data.status==='Failed'){
           if ('alreadyusedmessage' === data.message)
             this._notificationService.warningTopRight(this._transloco.translate('TERMSCONDITION.alreadyusedmessage'));
 
-        }else if(data.status==='SUCCESS'){
+        }else if(data.status==='Success'){
          this._notificationService.successTopRight(this._transloco.translate('TERMSCONDITION.deletemessage'));
         }else{
           this._notificationService.errorTopRight(this._transloco.translate('TERMSCONDITION.SomeSystemError'));
@@ -446,22 +475,32 @@ export class InstructionComponent {
   }
 
   handleSortChange(event) {
+    console.log('======sort change=======', event);
     this.sortBy = event.active;
     this.sortDirection = event.direction;
     this.sortBy = this.sortBy;
-    this.sortDirection = this.sortDirection.toUpperCase();
+    //this.sortDirection = this.sortDirection.toUpperCase();
 
     this.Fetchlist();
   }
   changeSession(value) {
+    console.log("===========value====="+value);
+    
+    this.showTariffVlaue = true;
     if (value != '') {
+    
+      this.disconnectionAmnt= 0;
+      this.meterRemovingAmnt= 0
+      this.appAmnt= 0
       this.showTariff = true;
       this.allSession = value;
     } else {
       this.showTariff = false;
+      this.showTariffVlaue = false;
     }
 
   }
+
   changeTariffType(value) {
     this.sessionTariffType = value;
     const request = {
@@ -470,9 +509,14 @@ export class InstructionComponent {
       sessions: this.allSession
     };
     this._service.GetSessionTariff(request).subscribe(el => {
+      let valueT = [];
       if (el.data != null && el.data.length > 0) {
-
-        this.WorktypeForm.controls.tariffValue.setValue(el.data[0].tariffValue);
+        el.data.forEach(element => {
+        valueT.push(element.tariffValue);
+        });
+        console.log("========valueT=============="+valueT);
+        
+        this.WorktypeForm.controls.tariffValue.setValue(valueT);
         this.WorktypeForm.controls.disconnectionAmnt.setValue(el.data[0].disconnectionAmnt);
         this.WorktypeForm.controls.meterRemovingAmnt.setValue(el.data[0].meterRemovingAmnt);
         this.WorktypeForm.controls.appAmnt.setValue(el.data[0].appAmnt);

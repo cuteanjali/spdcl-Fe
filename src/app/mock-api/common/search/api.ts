@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { cloneDeep } from 'lodash-es';
 import { FuseNavigationItem, FuseNavigationService } from '@fuse/components/navigation';
 import { FuseMockApiService } from '@fuse/lib/mock-api';
-import { AdminNavigation, defaultNavigation } from 'app/mock-api/common/navigation/data';
 import { contacts } from 'app/mock-api/apps/contacts/data';
 import { tasks } from 'app/mock-api/apps/tasks/data';
 import { AuthService } from 'app/core/auth/auth.service';
@@ -12,8 +11,7 @@ import { AuthService } from 'app/core/auth/auth.service';
 })
 export class SearchMockApi
 {
-    private readonly _defaultNavigation: FuseNavigationItem[] = defaultNavigation;
-    private readonly _AdminNavigation: FuseNavigationItem[] = AdminNavigation;
+    
     private readonly _contacts: any[] = contacts;
     private readonly _tasks: any[] = tasks;
     loginuser: string;
@@ -57,15 +55,7 @@ export class SearchMockApi
         //this.loginuser = user;
         
 
-    if(this.loginuser=='Admin'){
-        
-        flatNavigation = this._fuseNavigationService.getFlatNavigation(this._defaultNavigation);
-       
-    }else{
-        
-        flatNavigation = this._fuseNavigationService.getFlatNavigation(this._AdminNavigation);
-        
-    }
+  
          
         // -----------------------------------------------------------------------------------------------------
         // @ Search results - GET

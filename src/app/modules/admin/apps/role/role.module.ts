@@ -28,16 +28,17 @@ import { MatRadioModule } from '@angular/material/radio';
 import { ToastrModule } from 'ngx-toastr';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { RoleComponent } from './role.component';
 
 const routes: Routes = []=[
   {
     path     : '',
-   component: SeminarComponent,
+   component: RoleComponent,
   }
 ];
 @NgModule({
   declarations: [ 
-    SeminarComponent,],
+    RoleComponent,],
   
   imports: [
     RouterModule.forChild(routes),
@@ -74,4 +75,4 @@ const routes: Routes = []=[
         
   ],
 })
-export class SeminarModule { }
+export class RoleModule { }

@@ -47,10 +47,15 @@ export class InstructionService {
   }
   deleteDisconnection(id,request): Observable<any> {
   
-    return this._httpClient.post(`${environment.apiUrl}v1/deleteDisconnection/spdcl`+id,request);
+    return this._httpClient.post(`${environment.apiUrl}v1/deleteDisconnection/spdcl/`+id,request);
   }
   downloadDisconnection(id): Observable<any> {
   
     return this._httpClient.get(`${environment.apiUrl}v1/downloadDisconnection/spdcl/`+id);
+  }
+
+  saveDisconnection(request): Observable<any> {
+  
+    return this._httpClient.post(`${environment.apiUrl}v1/saveDisconnection`,request);
   }
 }

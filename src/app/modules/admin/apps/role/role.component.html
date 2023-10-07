@@ -13,7 +13,7 @@
             
             <div class="mt-2">
                 <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
-                    Employees
+                    Roles
                 </h2>
             </div>
         </div>
@@ -30,7 +30,7 @@
         class="mat-focus-indicator ml-4 mat-flat-button mat-button-base mat-primary" style="background: #314f60;"><span
             class="mat-button-wrapper"> <mat-icon class="material-icons">
                 add
-            </mat-icon> Add Employee </span>
+            </mat-icon> Add Role </span>
         
     </button>
     </div>
@@ -116,22 +116,17 @@
                                 <td mat-cell *matCellDef="let element"> {{element.name}} </td>
                             </ng-container>
 
-                            <ng-container matColumnDef="userName">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
-                                <td mat-cell *matCellDef="let element"> {{element.userName}} </td>
+                            <ng-container matColumnDef="desc">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+                                <td mat-cell *matCellDef="let element"> {{element.desc}} </td>
                             </ng-container>
 
-                            <ng-container matColumnDef="role">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Role</th>
-                                <td mat-cell *matCellDef="let element"> {{element.role}} </td>
-                            </ng-container>
-
-                            <ng-container matColumnDef="status">
+                            <!-- <ng-container matColumnDef="status">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
                                 <td mat-cell *matCellDef="let element"> {{element.status}} </td>
-                            </ng-container>
+                            </ng-container> -->
 
-                            
+                           
 
                             <ng-container matColumnDef="action">
                                 <th mat-header-cell *matHeaderCellDef>{{'Action' | translate}}</th>
@@ -183,32 +178,24 @@
             <form [formGroup]="SeminarForm" fxFlex class="event-form w-100-p">
                 <div fxLayout="column" class="p-20" style="padding: 2rem !important;">
                     <mat-form-field style="width: 100%" appearance="outline">
-                        <mat-label>First Name</mat-label>
-                        <input matInput formControlName="firstName">
+                        <mat-label>Role Name</mat-label>
+                        <input matInput formControlName="name">
                     </mat-form-field>
 
                     <mat-form-field style="width: 100%" appearance="outline">
                        
-                            <mat-label>Last Name</mat-label>
-                            <input matInput formControlName="lastName">
+                            <mat-label>Description</mat-label>
+                            <input matInput formControlName="desc">
                     </mat-form-field>
 
                     
 
-                    <mat-form-field style="width: 100%" appearance="outline">
+                    <!-- <mat-form-field style="width: 100%" appearance="outline">
                      
                         <mat-label>Email Id</mat-label>
                         <input matInput formControlName="email" type="email">
-                    </mat-form-field>
+                    </mat-form-field> -->
 
-                    <mat-form-field style="width: 100%" appearance="outline">
-                        <mat-label>Select Role</mat-label>
-                        <mat-select formControlName="role">
-                            <mat-option *ngFor="let item1 of roles"
-                            [value]="item1.id" >{{item1.name}}</mat-option>
-                        </mat-select>
-                        <mat-error></mat-error>
-                    </mat-form-field>&nbsp;&nbsp;
                     
                     <!-- <mat-form-field style="width: 100%;" appearance="outline">
                         <mat-label>{{'Seminar Date' | translate}}</mat-label>
@@ -223,10 +210,10 @@
                         <input matInput formControlName="description">
                     </mat-form-field> -->
                     
-                    <mat-radio-group formControlName="status">
+                    <!-- <mat-radio-group formControlName="status">
                         <mat-radio-button class="ml-6" value="Active">Active</mat-radio-button>
                         <mat-radio-button class="ml-6" value="Inactive">Inactive</mat-radio-button>
-                      </mat-radio-group>
+                      </mat-radio-group> -->
                 </div>
             </form>
 

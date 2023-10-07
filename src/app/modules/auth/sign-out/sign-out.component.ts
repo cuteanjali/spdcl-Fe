@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { finalize, Subject, takeUntil, takeWhile, tap, timer } from 'rxjs';
 import { AuthService } from 'app/core/auth/auth.service';
 
@@ -21,7 +21,7 @@ export class AuthSignOutComponent implements OnInit, OnDestroy
      * Constructor
      */
     constructor(
-        private _authService: AuthService,
+        private _authService: AuthService,  private _activatedRoute: ActivatedRoute,
         private _router: Router
     )
     {
@@ -36,8 +36,6 @@ export class AuthSignOutComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
-        console.log("==========================");
-        
         // Sign out
         this._authService.signOut();
         window.localStorage.clear();
@@ -45,7 +43,8 @@ export class AuthSignOutComponent implements OnInit, OnDestroy
         timer(1000, 1000)
             .pipe(
                 finalize(() => {
-                    this._router.navigate(['sign-in']);
+                    this._authService.signIn
+                    location.reload();
                 }),
                 takeWhile(() => this.countdown > 0),
                 takeUntil(this._unsubscribeAll),
@@ -54,7 +53,12 @@ export class AuthSignOutComponent implements OnInit, OnDestroy
             .subscribe();
             
     }
-
+    signIn1(){
+        window.localStorage.clear();
+        this._authService.signIn
+        location.reload();
+                                    
+    }
     /**
      * On destroy
      */

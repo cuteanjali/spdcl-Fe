@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FuseNavigationItem } from '@fuse/components/navigation/navigation.types';
-import { AdminNavigation } from 'app/mock-api/common/navigation/data';
+
 import { environment } from 'environments/environment';
 import { Observable, of, switchMap, throwError } from 'rxjs';
 

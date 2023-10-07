@@ -25,5 +25,11 @@ export class SignOutClassicComponent
         private _router: Router
     )
     {
+        
+    }
+    logOut(){
+        console.log("===logOut");
+        window.localStorage.clear();
+    this._authService.signOut();
     }
 }

@@ -133,7 +133,7 @@
 		"Work Name is required":"Work Name is required!",
 		"updatemessage":"Data Updated Successfully",
 		"createmessage":"Data Created Successfully",
-		"alreadyusedmessage":"Record already used Cannot be deleted",
+		"alreadyusedmessage":"Record already used Cannot be deleted or Edit",
 		"alreadyexistmessage":"Record already Exists",
 		"deletemessage":"Record Deleted Successfully",
 		"recordnotfoundmessage":"Record Not found",

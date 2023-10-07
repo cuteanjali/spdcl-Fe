@@ -94,6 +94,7 @@ export class AuthInterceptor implements HttpInterceptor
                         }),
                         catchError(errodata=>{
                             this._authService.signOut();
+                            
                           return throwError(errodata)
                         })
                     )

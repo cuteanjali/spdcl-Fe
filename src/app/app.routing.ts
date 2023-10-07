@@ -10,14 +10,14 @@ import { InitialDataResolver } from 'app/app.resolvers';
 export const appRoutes: Route[] = [
 
     // Redirect empty path to '/dashboards/project'
-    {path: '', pathMatch : 'full', redirectTo: 'apps/sessionTariff'},
+    {path: '', pathMatch : 'full', redirectTo: 'pages/settings'},
 
     // Redirect signed in user to the '/dashboards/project'
     //
     // After the user signs in, the sign in page will redirect the user to the 'signed-in-redirect'
     // path. Below is another redirection for that path to redirect the user to the desired
     // location. This is a small convenience to keep all main routes together here on this file.
-    {path: 'signed-in-redirect', pathMatch : 'full', redirectTo: 'apps/sessionTariff'},
+    {path: 'signed-in-redirect', pathMatch : 'full', redirectTo: 'apps/disconnection'},
 
     // Auth routes for guests
     {
@@ -91,13 +91,14 @@ export const appRoutes: Route[] = [
               
               //  {path: 'profile', loadChildren: () => import('app/modules/admin/apps/profile/profile.module').then(m => m.ProfileModule)},
               //  {path: 'users/user-result/:id', loadChildren: () => import('app/modules/admin/apps/users/user-result/user-result.module').then(m => m.UserResultModule)},
-              //  {path: 'seminar', loadChildren: () => import('app/modules/admin/apps/seminar/seminar.module').then(m => m.SeminarModule)},
+                {path: 'employee', loadChildren: () => import('app/modules/admin/apps/seminar/seminar.module').then(m => m.SeminarModule)},
               //  {path: 'questions', loadChildren: () => import('app/modules/admin/apps/questions/questions.module').then(m => m.QuestionsModule)},
               //  {path: 'questions/examsets/:id', loadChildren: () => import('app/modules/admin/apps/questions/examsets/examsets.module').then(m => m.ExamsetsModule)},
              //   {path: 'questions/questions-detail/:examId/:setId', loadChildren: () => import('app/modules/admin/apps/questions/questions-detail/questions-detail.module').then(m => m.QuestionsDetailModule)},
               //  {path: 'questions/questions-detail/questionspdfupload/:examId/:setId', loadChildren: () => import('app/modules/admin/apps/questions/questions-detail/questionspdfupload/questionspdfupload.module').then(m => m.QuestionspdfuploadModule)},
                   {path: 'sessionTariff', loadChildren: () => import('app/modules/admin/apps/worktype/worktype.module').then(m => m.WorktypeModule)},
                   {path: 'disconnection', loadChildren: () => import('app/modules/admin/apps/instruction/instruction.module').then(m => m.InstructionModule)},
+                  {path: 'role', loadChildren: () => import('app/modules/admin/apps/role/role.module').then(m => m.RoleModule)},
               
                   //  {path: 'workersdetails', loadChildren: () => import('app/modules/admin/apps/workersdetails/workersdetails.module').then(m => m.WorkersdetailsModule)},
               //  {path: 'hotworker-work-history', loadChildren: () => import('app/modules/admin/apps/hotworker-work-history/hotworker-work-history.module').then(m => m.HotworkerWorkHistoryModule)},

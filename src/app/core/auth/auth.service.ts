@@ -81,12 +81,13 @@ export class AuthService {
                     // @ts-ignore
                     this._userService.user =  credentials.email;
                     window.localStorage.setItem('userLogin',credentials.email);
-                    window.localStorage.setItem('role', "admin");
+                    window.localStorage.setItem('role', response.data.role);
                     window.localStorage.setItem('id', response.data.id);
                     window.localStorage.setItem('accessToken', response.data.accessToken);
                     window.localStorage.setItem('token', response.data.token);
-                     window.localStorage.setItem('firstname', "Anjali");
-                     window.localStorage.setItem('lastname', "Kumari");
+                     window.localStorage.setItem('firstname', response.data.firstName);
+                     
+                     window.localStorage.setItem('lastname', response.data.lastName);
                     // response.data.userOrgs.forEach(element => {
                     //     console.log('check elements ',element)
                     //     this.orgsId.push(element.orgId)  

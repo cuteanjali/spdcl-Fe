@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { cloneDeep } from 'lodash-es';
 import { FuseNavigationItem } from '@fuse/components/navigation';
 import { FuseMockApiService } from '@fuse/lib/mock-api';
-import { compactNavigation, contractorNavigation, defaultNavigation, hotWorkerNavigation, inspectorNavigation, instructorNavigation, instructorWithSubNavigation } from 'app/mock-api/common/navigation/data';
+import { compactNavigation, executiveAssistantNavigation, defaultNavigation, adminNavigation, itAssistantNavigation} from 'app/mock-api/common/navigation/data';
 
 @Injectable({
     providedIn: 'root'
@@ -28,22 +28,16 @@ export class NavigationMockApi
             const subscription = window.localStorage.getItem('subscriptionType');
             switch (role.toString().toUpperCase()) {
                 case 'ADMIN':
-                    this._defaultNavigation = defaultNavigation;
+                    this._defaultNavigation = adminNavigation;
                     break;
-                case 'EMPLOYER':
-                    this._defaultNavigation = contractorNavigation;
+                case 'EXECUTIVE ASSISTANT':
+                    this._defaultNavigation = executiveAssistantNavigation;
                     
                     break;
-                case 'HOT WORKER':
-                    this._defaultNavigation = hotWorkerNavigation;
+                case 'IT ASSISTANT':
+                    this._defaultNavigation = itAssistantNavigation;
                     break;
-                case 'INSTRUCTOR':
-                    if(subscription  && subscription !== 'FREE') this._defaultNavigation = instructorWithSubNavigation;
-                    else this._defaultNavigation = instructorNavigation;
-                    break;
-                case 'INSPECTOR':
-                    this._defaultNavigation = inspectorNavigation;
-                    break;
+             
             }
         }
         

@@ -22,4 +22,9 @@ export class WorktypeService {
   
     return this._httpClient.get(`${environment.apiUrl}v1/getAllSessionTariff/spdcl`);
   }
+
+  validateSessionTariff(type,session): Observable<any> {
+  
+    return this._httpClient.get(`${environment.apiUrl}v1/validateSessionTariff/spdcl/`+type+"/"+session);
+  }
 }

@@ -37,7 +37,7 @@ export class AuthSignInComponent implements OnInit {
     /**
      * Constructor
      */
-    orgs=[]
+    orgs = []
     role: any;
     constructor(
 
@@ -63,8 +63,7 @@ export class AuthSignInComponent implements OnInit {
         // Create the form
         this.signInForm = this._formBuilder.group({
             email: ['', [Validators.required, Validators.email]],
-            password: ['', Validators.required],
-            orgId: [0]
+            password: ['', Validators.required]
 
         });
 
@@ -97,7 +96,7 @@ export class AuthSignInComponent implements OnInit {
                 (ele) => {
                     if (ele.status === 'Success') {
                         this.setForAdminAndForward();
-                            this.signInForm.enable();
+                        this.signInForm.enable();
                         //this._notificationService.successTopRight("Logined");
                     }
                     else if (ele.status === 'Failed') {
@@ -116,10 +115,25 @@ export class AuthSignInComponent implements OnInit {
             );
     }
     setForAdminAndForward() {
-        const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || '/signed-in-redirect';
-        window.localStorage.setItem('orgId', '0');
-        window.localStorage.setItem('subscriptionType', 'ADMIN');
-        this._router.navigateByUrl(redirectURL);
-        new NavigationMockApi(this._fuseMockApiService).registerHandlers();
+        const role = window.localStorage.getItem('role');
+        let forward = '/signed-in-redirect';
+        forward = 'apps/disconnection'
+        if (role.toString().toUpperCase() === 'EXECUTIVE ASSISTANT') {
+            const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || forward;
+            this._router.navigateByUrl(redirectURL);
+            new NavigationMockApi(this._fuseMockApiService).registerHandlers();
+
+        } else if (role.toString().toUpperCase() === 'IT ASSISTANT') {
+            const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || forward;
+            this._router.navigateByUrl(redirectURL);
+            new NavigationMockApi(this._fuseMockApiService).registerHandlers();
+
+        }
+
+        else if (role.toString().toUpperCase() === 'ADMIN') {
+            const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || '/signed-in-redirect';
+            this._router.navigateByUrl(redirectURL);
+            new NavigationMockApi(this._fuseMockApiService).registerHandlers();
+        }
     }
 }

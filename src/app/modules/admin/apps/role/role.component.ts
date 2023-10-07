@@ -1,27 +1,27 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSidenav } from '@angular/material/sidenav';
-import { SeminarService } from './seminar.service';
+import { RoleService } from './role.service';
 import { MatTableDataSource } from '@angular/material/table';
-import { seminarapp } from './seminarapp';
+import { seminarapp } from './roleapp';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { NotificationService } from 'app/shared/notification/notification';
 import { checkValidDate, checkValidText } from 'app/shared/validation/validation-utils';
 import { TranslateService } from '@ngx-translate/core';
+import { id } from 'date-fns/locale';
 
 @Component({
-  selector: 'app-seminar',
-  templateUrl: './seminar.component.html',
-  styleUrls: ['./seminar.component.scss']
+  selector: 'app-role',
+  templateUrl: './role.component.html',
+  styleUrls: ['./role.component.scss']
 })
-export class SeminarComponent implements OnInit {
+export class RoleComponent implements OnInit {
   SeminarForm: FormGroup
   title: any;
   sidenavWidth = 60;
   userId: any;
   deletePush: any[] ;
-  roles: any[] ;
   @ViewChild('sidenav') sidenav: MatSidenav;
   companyNameList = [];
   data: any;
@@ -29,7 +29,7 @@ export class SeminarComponent implements OnInit {
   loading:boolean =false
   CourseList = [];
   Instructorlist= [];
-  displayedColumns: string[] = ['name','userName','role','status','action'];
+  displayedColumns: string[] = ['name','desc','action'];
   dataSource = new MatTableDataSource<seminarapp>(this.ELEMENT_DATA);
   titlenote: string;
   applyFilter(filterValue: string) {
@@ -42,18 +42,15 @@ export class SeminarComponent implements OnInit {
     }, 500);
   }
 
-  constructor(private _fb: FormBuilder,private _service: SeminarService,private _notificationService:NotificationService,
+  constructor(private _fb: FormBuilder,private _service: RoleService,private _notificationService:NotificationService,
     private translate: TranslateService,) { }
   @ViewChild(MatPaginator) private _paginator: MatPaginator;
  
   ngOnInit(): void {
-  this.fetchRleList();
+  
     this.SeminarForm = this._fb.group({
-      firstName: [''],
-      lastName: [''],
-      email: [''],
-      status:'',
-      role:[''],
+      name: [''],
+      desc: ['']
     });
   
     this.userId= window.localStorage.getItem('id');
@@ -72,7 +69,6 @@ export class SeminarComponent implements OnInit {
         this.loading = true;
       }
     });
-    
   }
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
@@ -85,104 +81,75 @@ export class SeminarComponent implements OnInit {
     this.sort.sortChange.emit(sortState);
 
   }
-  fetchRleList(){
-   
-     this._service.getAllRoles().subscribe(report => {
-      this.loading = true;
-      if (report != null) {
-        this.roles = report.data;
-      
-      } else {
-      
-      }
-    });
-  }
 addDialog(){
   
   
   this.data = undefined;
-  this.title = "Add Employee";
+  this.title = "Add Role";
   this.SeminarForm = this._fb.group({
-    firstName: [''],
-    lastName: [''],
-    email: [''],
-    status:'Active',
-      role:[''],
+    name: [''],
+    desc: ['']
   });
 
 }
    editdialog(event){
     this.data = event;
-    this.title = "Edit Employee";
+    this.title = "Edit Role";
     this.SeminarForm = this._fb.group({
-      firstName:event.firstName,
-      lastName: event.lastName,
-      email: event.userName,
-      status:event.status,
-      role:event.roleId,
+      name:event.name,
+      desc: event.desc
     
     });
   }
   submit(form){
        if( this.data === undefined){
-        let RoleAssignModel = [{
-          id:this.SeminarForm.get('role').value
-        }];
          const object = {               
-          firstName: this.SeminarForm.get('firstName').value,
-          lastName: this.SeminarForm.get('lastName').value,         
-          email: this.SeminarForm.get('email').value,
-          status: this.SeminarForm.get('status').value,
-          tenantCode: "spdcl",
-          password:"123455",
-          roles:RoleAssignModel,
+          name: this.SeminarForm.get('name').value,
+          desc: this.SeminarForm.get('desc').value,         
+         
+          tenantCode: "spdcl"
          }
          const validateForm = this.checkvalidation();
          if (validateForm) {
-         this._service.saveUser(object).subscribe((el) => {
+         this._service.saveRole(object).subscribe((el) => {
           if (el['status']==='Failed'){
-            this._notificationService.successTopRight(this.translate.instant(el['message']));
+            this._notificationService.errorTopRight("Saved Not successfully!");
           }else if(el['status']==='Success'){
-            this._notificationService.successTopRight(this.translate.instant(el['message']));
+            this._notificationService.successTopRight("Saved successfully!");
             this.fetchCourseList();
             this.sidenav.close();
           }else if(el['status']==='FailedUsed'){
-            this._notificationService.warningTopRight("Email Id already Exist!");
+            this._notificationService.warningTopRight("Role name already Exist!");
             this.SeminarForm.controls.name.setValue('');
           }
+          
           else{
-            this._notificationService.errorTopRight(this.translate.instant(el['message']));
+            this._notificationService.errorTopRight("Internal System error!");
           }         
         });
        }
       }else{
-        let RoleAssignModel = [{
-          id:this.SeminarForm.get('role').value
-        }];
         const prospectObj = {               
-          firstName: this.SeminarForm.get('firstName').value,
-          lastName: this.SeminarForm.get('lastName').value,         
-          email: this.SeminarForm.get('email').value,
-          status: this.SeminarForm.get('status').value,
-          id: this.data.id,  
+          name: this.SeminarForm.get('name').value,
+          desc: this.SeminarForm.get('desc').value,  
           tenantCode: "spdcl",
-          roles:RoleAssignModel,
+          id:this.data.id
          }
          const validateForm = this.checkvalidation();
          if (validateForm) {
-         this._service.saveUser( prospectObj).subscribe((el) => {      
+         this._service.saveRole( prospectObj).subscribe((el) => {      
           if (el['status']==='Failed'){
-            this._notificationService.successTopRight(this.translate.instant(el['message']));
-          }else if(el['status']==='Success'){
-            this._notificationService.successTopRight(this.translate.instant(el['message']));
-            this.fetchCourseList();
-            this.sidenav.close();
+            this._notificationService.errorTopRight("Updated Not successfully!");
           }else if(el['status']==='FailedUsed'){
-            this._notificationService.warningTopRight("Email Id already Exist!");
+            this._notificationService.warningTopRight("Role name already Exist!");
             this.SeminarForm.controls.name.setValue('');
           }
-          else{
-            this._notificationService.errorTopRight(this.translate.instant(el['message']));
+          else if(el['status']==='Success'){
+            this._notificationService.successTopRight("Updated successfully!");
+            this.fetchCourseList();
+            this.sidenav.close();
+          }else{
+            this._notificationService.errorTopRight("Internal System error!");
           }      
         });
        }
@@ -191,21 +158,15 @@ addDialog(){
   checkvalidation(): boolean 
     { 
        
-      if (!checkValidText(this.SeminarForm.get('firstName').value)) {
+      if (!checkValidText(this.SeminarForm.get('name').value)) {
         this._notificationService.errorTopRight(this.translate.instant('Please fill First Name'));
         return false;
       }
       
-      if (!checkValidText(this.SeminarForm.get('lastName').value+'')) {
+      if (!checkValidText(this.SeminarForm.get('desc').value+'')) {
         this._notificationService.errorTopRight(this.translate.instant('Please fill Last Name'));
         return false;
       }
-      
-   
-    if (!checkValidText(this.SeminarForm.get('email').value+'')) {
-      this._notificationService.errorTopRight(this.translate.instant('Please fill EmailId'));
-      return false;
-    }
 
       return true;
     }

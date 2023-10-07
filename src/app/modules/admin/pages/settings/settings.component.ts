@@ -63,11 +63,9 @@ export class SettingsComponent implements OnInit, OnDestroy
            
             {
                 id         : 'plan-billing',
-                icon       : 'heroicons_outline:credit-card',
-                title      : this._transloco.translate(
-                         "PROFILE.Plan & Billing"),
-                description: this._transloco.translate(
-                    "PROFILE.Manage your subscription plan, payment method and billing information")
+                icon       : 'heroicons_outline:lock-closed',
+                title      : "Update Password",
+                description: "Update new password"
             },
 
         ];
