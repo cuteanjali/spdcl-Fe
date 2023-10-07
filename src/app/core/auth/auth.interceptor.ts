@@ -2,7 +2,6 @@ import { Injectable, Injector } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { AuthService } from 'app/core/auth/auth.service';
-import { WorktypeService } from 'app/modules/admin/apps/worktype/worktype.service';
 import { AuthUtils } from './auth.utils';
 import {environment} from '../../../environments/environment';
 @Injectable()

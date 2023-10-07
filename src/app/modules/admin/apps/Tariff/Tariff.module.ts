@@ -25,21 +25,21 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatRadioModule } from '@angular/material/radio';
 import { ToastrModule } from 'ngx-toastr';
-import { WorktypeComponent } from './worktype.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslocoModule } from '@ngneat/transloco';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { AppComponent } from 'app/app.component';
+import { TariffComponent } from './Tariff.component';
 
 const routes: Routes = []=[
   {
     path     : '',
-   component: WorktypeComponent,
+   component: TariffComponent,
   }
 ];
 @NgModule({
-  declarations: [WorktypeComponent],
+  declarations: [TariffComponent],
   imports: [
     RouterModule.forChild(routes),
     MatIconModule,
@@ -93,4 +93,4 @@ const routes: Routes = []=[
     MatProgressSpinnerModule,
   ],
 })
-export class WorktypeModule { }
+export class TariffModule { }

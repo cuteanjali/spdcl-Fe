@@ -5,20 +5,22 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { NotificationService } from 'app/shared/notification/notification';
 import { MatSort, Sort } from '@angular/material/sort';
-import { worktypeapp } from './worktypeapp';
-import { WorktypeService } from './worktype.service';
+
 import { checkValidText } from 'app/shared/validation/validation-utils';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { MatDialog } from '@angular/material/dialog';
 import { DOCUMENT } from '@angular/common';
 import { Router } from '@angular/router';
+
+import { TariffService } from './Tariff.service';
+import { Tariff } from './Tariffapp';
 @Component({
-  selector: 'app-worktype',
-  templateUrl: './worktype.component.html',
-  styleUrls: ['./worktype.component.scss']
+  selector: 'app-tariff',
+  templateUrl: './Tariff.component.html',
+  styleUrls: ['./Tariff.component.scss']
 })
-export class WorktypeComponent {
+export class TariffComponent {
 
   WorktypeForm: FormGroup
   workform: FormGroup
@@ -31,13 +33,13 @@ export class WorktypeComponent {
   cleandata = [];
   adatach = [];
   data: any;
-  ELEMENT_DATA: worktypeapp[] = [];
+  ELEMENT_DATA: Tariff[] = [];
   loading: boolean = false
   validate: boolean = false
   worktypelist = [];
   currentLang: any;
   displayedColumns: string[] = ['session', 'tariffType', 'tariffValue', 'appAmnt', 'meterRemovingAmnt', 'disconnectionAmnt', 'status', 'action'];
-  dataSource = new MatTableDataSource<worktypeapp>(this.ELEMENT_DATA);
+  dataSource = new MatTableDataSource<Tariff>(this.ELEMENT_DATA);
   titlenote: string;
   deletelement: any;
   applyFilter(filterValue: string) {
@@ -52,7 +54,7 @@ export class WorktypeComponent {
   availableLang = [];
   availabletariffType = [];
   constructor(@Inject(DOCUMENT) private _document: Document, private router: Router,
-    private translate: TranslateService, private _fb: FormBuilder, private _service: WorktypeService, private _notificationService: NotificationService
+    private translate: TranslateService, private _fb: FormBuilder, private _service: TariffService, private _notificationService: NotificationService
     , private _transloco: TranslocoService, private _matDialog: MatDialog) { }
   @ViewChild(MatPaginator) private _paginator: MatPaginator;
 
@@ -130,7 +132,7 @@ export class WorktypeComponent {
         let resp = this._service.getAllSessionTariff().subscribe(report => {
           this.loading = true;
           if (report != null) {
-            this.dataSource.data = report.data as worktypeapp[];
+            this.dataSource.data = report.data as Tariff[];
             this.loading = false;
           } else {
             this.loading = true;

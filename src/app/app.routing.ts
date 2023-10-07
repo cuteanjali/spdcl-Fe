@@ -91,13 +91,13 @@ export const appRoutes: Route[] = [
               
               //  {path: 'profile', loadChildren: () => import('app/modules/admin/apps/profile/profile.module').then(m => m.ProfileModule)},
               //  {path: 'users/user-result/:id', loadChildren: () => import('app/modules/admin/apps/users/user-result/user-result.module').then(m => m.UserResultModule)},
-                {path: 'employee', loadChildren: () => import('app/modules/admin/apps/seminar/seminar.module').then(m => m.SeminarModule)},
+                {path: 'employee', loadChildren: () => import('app/modules/admin/apps/employee/employee.module').then(m => m.employeeModule)},
               //  {path: 'questions', loadChildren: () => import('app/modules/admin/apps/questions/questions.module').then(m => m.QuestionsModule)},
               //  {path: 'questions/examsets/:id', loadChildren: () => import('app/modules/admin/apps/questions/examsets/examsets.module').then(m => m.ExamsetsModule)},
              //   {path: 'questions/questions-detail/:examId/:setId', loadChildren: () => import('app/modules/admin/apps/questions/questions-detail/questions-detail.module').then(m => m.QuestionsDetailModule)},
               //  {path: 'questions/questions-detail/questionspdfupload/:examId/:setId', loadChildren: () => import('app/modules/admin/apps/questions/questions-detail/questionspdfupload/questionspdfupload.module').then(m => m.QuestionspdfuploadModule)},
-                  {path: 'sessionTariff', loadChildren: () => import('app/modules/admin/apps/worktype/worktype.module').then(m => m.WorktypeModule)},
-                  {path: 'disconnection', loadChildren: () => import('app/modules/admin/apps/instruction/instruction.module').then(m => m.InstructionModule)},
+                  {path: 'sessionTariff', loadChildren: () => import('app/modules/admin/apps/Tariff/Tariff.module').then(m => m.TariffModule)},
+                  {path: 'disconnection', loadChildren: () => import('app/modules/admin/apps/disconnection/disconnection.module').then(m => m.disconnectionModule)},
                   {path: 'role', loadChildren: () => import('app/modules/admin/apps/role/role.module').then(m => m.RoleModule)},
               
                   //  {path: 'workersdetails', loadChildren: () => import('app/modules/admin/apps/workersdetails/workersdetails.module').then(m => m.WorkersdetailsModule)},

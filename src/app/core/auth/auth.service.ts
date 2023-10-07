@@ -4,7 +4,8 @@ import {catchError, Observable, of, switchMap, throwError} from 'rxjs';
 import {AuthUtils} from 'app/core/auth/auth.utils';
 import {UserService} from 'app/core/user/user.service';
 import {environment} from '../../../environments/environment';
-import { WorktypeService } from 'app/modules/admin/apps/worktype/worktype.service';
+import { TariffService } from 'app/modules/admin/apps/Tariff/Tariff.service';
+
 
 @Injectable()
 export class AuthService {
@@ -15,7 +16,7 @@ export class AuthService {
      */
     constructor(
         private _httpClient: HttpClient,
-        private _userService: UserService,private _service: WorktypeService,
+        private _userService: UserService,private _service: TariffService,
     ) {}
   
     ngAfterViewInit() {
@@ -86,7 +87,7 @@ export class AuthService {
                     window.localStorage.setItem('accessToken', response.data.accessToken);
                     window.localStorage.setItem('token', response.data.token);
                      window.localStorage.setItem('firstname', response.data.firstName);
-                     
+
                      window.localStorage.setItem('lastname', response.data.lastName);
                     // response.data.userOrgs.forEach(element => {
                     //     console.log('check elements ',element)

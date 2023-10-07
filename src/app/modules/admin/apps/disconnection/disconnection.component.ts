@@ -1,10 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
-import { insturctionapp } from './instructionapp';
+
 import { MatSidenav } from '@angular/material/sidenav';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { InstructionService } from './instruction.service';
+
 import { NotificationService } from 'app/shared/notification/notification';
 import { MatSort, Sort } from '@angular/material/sort';
 import { TranslateService } from '@ngx-translate/core';
@@ -13,12 +13,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { COLUMN_TYPE, DataGridColumnHeader } from 'app/shared/component/data-grid/data-grid.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
+import { disconnectionapp } from './disconnectionapp';
+import { disconnectionService } from './disconnection.service';
 @Component({
-  selector: 'app-instruction',
-  templateUrl: './instruction.component.html',
-  styleUrls: ['./instruction.component.scss']
+  selector: 'app-disconnection',
+  templateUrl: './disconnection.component.html',
+  styleUrls: ['./disconnection.component.scss']
 })
-export class InstructionComponent {
+export class disconnectionComponent {
   WorktypeForm: FormGroup
   workform: FormGroup
   title: any;
@@ -32,7 +34,7 @@ export class InstructionComponent {
   data: any;
   currentLang: any;
   availableLang = [];
-  ELEMENT_DATA: insturctionapp[] = [];
+  ELEMENT_DATA: disconnectionapp[] = [];
   loading: boolean = false
   isEnabled: boolean = true;
   worktypelist = [];
@@ -73,7 +75,7 @@ export class InstructionComponent {
   // }
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
-  constructor(private _fb: FormBuilder, private _service: InstructionService, private _notificationService: NotificationService, private _matDialog: MatDialog,
+  constructor(private _fb: FormBuilder, private _service: disconnectionService, private _notificationService: NotificationService, private _matDialog: MatDialog,
     private translate: TranslateService, private _transloco: TranslocoService,
     private _httpClient: HttpClient) {
       

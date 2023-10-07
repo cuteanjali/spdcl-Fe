@@ -1,21 +1,23 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSidenav } from '@angular/material/sidenav';
-import { SeminarService } from './seminar.service';
+
 import { MatTableDataSource } from '@angular/material/table';
-import { seminarapp } from './seminarapp';
+
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { NotificationService } from 'app/shared/notification/notification';
 import { checkValidDate, checkValidText } from 'app/shared/validation/validation-utils';
 import { TranslateService } from '@ngx-translate/core';
+import { employeeapp } from './employeeapp';
+import { employeeService } from './employee.service';
 
 @Component({
-  selector: 'app-seminar',
-  templateUrl: './seminar.component.html',
-  styleUrls: ['./seminar.component.scss']
+  selector: 'app-employee',
+  templateUrl: './employee.component.html',
+  styleUrls: ['./employee.component.scss']
 })
-export class SeminarComponent implements OnInit {
+export class employeeComponent implements OnInit {
   SeminarForm: FormGroup
   title: any;
   sidenavWidth = 60;
@@ -25,12 +27,12 @@ export class SeminarComponent implements OnInit {
   @ViewChild('sidenav') sidenav: MatSidenav;
   companyNameList = [];
   data: any;
-  ELEMENT_DATA: seminarapp[] = []; 
+  ELEMENT_DATA: employeeapp[] = []; 
   loading:boolean =false
   CourseList = [];
   Instructorlist= [];
   displayedColumns: string[] = ['name','userName','role','status','action'];
-  dataSource = new MatTableDataSource<seminarapp>(this.ELEMENT_DATA);
+  dataSource = new MatTableDataSource<employeeapp>(this.ELEMENT_DATA);
   titlenote: string;
   applyFilter(filterValue: string) {
     this.loading = true;
@@ -42,7 +44,7 @@ export class SeminarComponent implements OnInit {
     }, 500);
   }
 
-  constructor(private _fb: FormBuilder,private _service: SeminarService,private _notificationService:NotificationService,
+  constructor(private _fb: FormBuilder,private _service: employeeService,private _notificationService:NotificationService,
     private translate: TranslateService,) { }
   @ViewChild(MatPaginator) private _paginator: MatPaginator;
  
@@ -66,7 +68,7 @@ export class SeminarComponent implements OnInit {
     let resp = this._service.getAllUsers().subscribe(report => {
       this.loading = true;
       if (report != null) {
-        this.dataSource.data = report.data as seminarapp[];
+        this.dataSource.data = report.data as employeeapp[];
         this.loading = false;
       } else {
         this.loading = true;

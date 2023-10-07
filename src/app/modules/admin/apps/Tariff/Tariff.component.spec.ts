@@ -1,18 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TariffComponent } from './Tariff.component';
 
-import { WorktypeComponent } from './worktype.component';
+
 
 describe('WorktypeComponent', () => {
-  let component: WorktypeComponent;
-  let fixture: ComponentFixture<WorktypeComponent>;
+  let component: TariffComponent;
+  let fixture: ComponentFixture<TariffComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WorktypeComponent ]
+      declarations: [ TariffComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(WorktypeComponent);
+    fixture = TestBed.createComponent(TariffComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
