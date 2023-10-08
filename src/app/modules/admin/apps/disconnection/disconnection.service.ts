@@ -58,4 +58,8 @@ export class disconnectionService {
   
     return this._httpClient.post(`${environment.apiUrl}v1/saveDisconnection`,request);
   }
+  getSearchDisconnection(key): Observable<any> {
+  
+    return this._httpClient.get(`${environment.apiUrl}v1/getSearchDisconnection/spdcl/`+key);
+  }
 }

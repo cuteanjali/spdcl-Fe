@@ -21,7 +21,7 @@ import { Tariff } from './Tariffapp';
   styleUrls: ['./Tariff.component.scss']
 })
 export class TariffComponent {
-
+  availablePhaseType=[];
   WorktypeForm: FormGroup
   workform: FormGroup
   title: any;
@@ -38,7 +38,7 @@ export class TariffComponent {
   validate: boolean = false
   worktypelist = [];
   currentLang: any;
-  displayedColumns: string[] = ['session', 'tariffType', 'tariffValue', 'appAmnt', 'meterRemovingAmnt', 'disconnectionAmnt', 'status', 'action'];
+  displayedColumns: string[] = ['session', 'tariffType','phaseType', 'tariffValue', 'appAmnt', 'meterRemovingAmnt', 'disconnectionAmnt', 'status', 'action'];
   dataSource = new MatTableDataSource<Tariff>(this.ELEMENT_DATA);
   titlenote: string;
   deletelement: any;
@@ -60,7 +60,35 @@ export class TariffComponent {
 
   ngOnInit(): void {
     this.validate = false;
+   
     this.availableLang = [
+      {
+        "label": "2012-2013"
+      },
+      {
+        "label": "2013-2014"
+      },
+      {
+        "label": "2014-2015"
+      },
+      {
+        "label": "2015-2016"
+      },
+      {
+        "label": "2016-2017"
+      },
+      {
+        "label": "2017-2018"
+      },
+      {
+        "label": "2018-2019"
+      },
+      {
+        "label": "2019-2020"
+      },
+      {
+        "label": "2020-2021"
+      },
       {
         "label": "2021-2022"
       },
@@ -69,7 +97,8 @@ export class TariffComponent {
       },
       {
         "label": "2023-2024"
-      }, {
+      },
+      {
         "label": "2024-2025"
       }
     ]
@@ -87,7 +116,10 @@ export class TariffComponent {
         "label": "NDS2D"
       },
       {
-        "label": "IAS1D"
+        "label": "IAS1D(Meterd)"
+      },
+      {
+        "label": "IAS1D(Unmeterd)"
       },
       {
         "label": "IAS2D"
@@ -97,11 +129,26 @@ export class TariffComponent {
       },
       {
         "label": "LTIS2D"
+      },
+      {
+        "label": "HGN"
+      },
+      {
+        "label": "KJ"
       }
-    ]
+    ];
+    this.availablePhaseType=[
+      {
+        "label": "Phase-1"
+      },
+      {
+        "label": "Phase-2"
+      }
+    ];
     this.WorktypeForm = this._fb.group({
       languageType: ['', Validators.required],
       tariffType: ['', Validators.required],
+      phaseTypes: ['', Validators.required],
       tariffValue: ['', Validators.required],
       appAmnt: ['', Validators.required],
       meterRemovingAmnt: ['', Validators.required],
@@ -153,6 +200,7 @@ export class TariffComponent {
       appAmnt: [''],
       meterRemovingAmnt: [''],
       disconnectionAmnt: [''],
+      phaseTypes:['']
     });
 
   }
@@ -166,6 +214,7 @@ export class TariffComponent {
       appAmnt: event.appAmnt,
       meterRemovingAmnt: event.meterRemovingAmnt,
       disconnectionAmnt: event.disconnectionAmnt,
+      phaseTypes: event.phaseType,
     });
   }
   submit(form) {
@@ -179,8 +228,9 @@ export class TariffComponent {
         appAmnt: this.WorktypeForm.get('appAmnt').value,
         meterRemovingAmnt: this.WorktypeForm.get('meterRemovingAmnt').value,
         disconnectionAmnt: this.WorktypeForm.get('disconnectionAmnt').value,
+        phaseType:this.WorktypeForm.get('phaseTypes').value,
       }
-      this._service.validateSessionTariff(this.WorktypeForm.get('tariffType').value, this.WorktypeForm.get('languageType').value).subscribe((ell) => {
+      this._service.validateSessionTariff(this.WorktypeForm.get('tariffType').value, this.WorktypeForm.get('phaseTypes').value,this.WorktypeForm.get('languageType').value).subscribe((ell) => {
         if (ell.status === 'Failed'|| ell.status === 'FailedUsed') {
           this._notificationService.warningTopRight(this._transloco.translate('WORKTYPE.alreadyexistmessage'));
         }
@@ -213,8 +263,9 @@ export class TariffComponent {
         appAmnt: this.WorktypeForm.get('appAmnt').value,
         meterRemovingAmnt: this.WorktypeForm.get('meterRemovingAmnt').value,
         disconnectionAmnt: this.WorktypeForm.get('disconnectionAmnt').value,
+        phaseType:this.WorktypeForm.get('phaseTypes').value,
       }
-      this._service.validateSessionTariff(this.WorktypeForm.get('tariffType').value, this.WorktypeForm.get('languageType').value).subscribe((ell) => {
+      this._service.validateSessionTariff(this.WorktypeForm.get('tariffType').value,this.WorktypeForm.get('phaseTypes').value, this.WorktypeForm.get('languageType').value).subscribe((ell) => {
         if (ell.status === 'Failed') {
           this._notificationService.warningTopRight(this._transloco.translate('WORKTYPE.alreadyexistmessage'));
         } else if (ell.status === 'FailedUsed') {
@@ -269,5 +320,18 @@ export class TariffComponent {
   GetToken() {
     return localStorage.getItem("token") || '';
   }
+  
 
+  changeSession(event){
+    this.availablePhaseType=[];
+    if(event ==='NDS2D' ||event ==='NDS1D'){
+      this.availablePhaseType.push({'label':'Phase-1'},{'label':'Phase-3'})
+    } else if(event ==='LTIS1D' || event ==='LTIS2D'){
+      this.availablePhaseType.push({'label':'Phase-1'},{'label':'Phase-3'})
+    }else if(event ==='IAS1D(Meterd)'|| event ==='IAS1D(Unmeterd)' || event ==='IAS2D'){
+      this.availablePhaseType.push({'label':'Phase-1'},{'label':'Phase-3'})
+    }else{
+      this.availablePhaseType.push({'label':'Phase-1'})
+    }
+  }
 }

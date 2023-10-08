@@ -58,21 +58,32 @@ export class disconnectionComponent {
   availablekbType = [];
   sessionText = [];
   selectedItems = new FormControl([]);
-  disconnectionAmnt : any;;
+  disconnectionAmnt : any;phaseType1: any;
+;
  meterRemovingAmnt : any;;
  appAmnt : any;
-
+ availablePhaseType=[];
+ phaseShow :boolean= false;
  showTariffVlaue: boolean = false;
-  // applyFilter(filterValue: string) {
-  //   this.loading = true; 
-  //   setTimeout(() => {
-  //     filterValue = filterValue.trim(); // Remove whitespace
-  //     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
-      
-  //     this.dataSource.filter = filterValue;
-  //     this.loading = false; 
-  //   }, 500);
-  // }
+  applyFilter(filterValue: string) {
+    console.log("=====filterValue======"+filterValue);
+    
+    if(filterValue != ''){
+    try {
+      this.dataSource = [];
+      this.loading = true;
+      this._service.getSearchDisconnection(filterValue).subscribe(data => {
+        if (data) {
+          this.dataSource = data.data;
+          this.totalRecordCount = data.data.length;
+        }
+        this.loading = false;
+      });
+}catch(err){}
+  }else{
+    this.Fetchlist();
+  }
+}
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   constructor(private _fb: FormBuilder, private _service: disconnectionService, private _notificationService: NotificationService, private _matDialog: MatDialog,
@@ -85,9 +96,37 @@ export class disconnectionComponent {
 
   ngOnInit(): void {
 this.showTariffVlaue = false;
+this.phaseShow = false;
     this.isEnabled = true;
 
     this.availableLang = [
+      {
+        "label": "2012-2013"
+      },
+      {
+        "label": "2013-2014"
+      },
+      {
+        "label": "2014-2015"
+      },
+      {
+        "label": "2015-2016"
+      },
+      {
+        "label": "2016-2017"
+      },
+      {
+        "label": "2017-2018"
+      },
+      {
+        "label": "2018-2019"
+      },
+      {
+        "label": "2019-2020"
+      },
+      {
+        "label": "2020-2021"
+      },
       {
         "label": "2021-2022"
       },
@@ -96,7 +135,8 @@ this.showTariffVlaue = false;
       },
       {
         "label": "2023-2024"
-      }, {
+      },
+      {
         "label": "2024-2025"
       }
     ]
@@ -114,7 +154,10 @@ this.showTariffVlaue = false;
         "label": "NDS2D"
       },
       {
-        "label": "IAS1D"
+        "label": "IAS1D(Meterd)"
+      },
+      {
+        "label": "IAS1D(Unmeterd)"
       },
       {
         "label": "IAS2D"
@@ -124,10 +167,22 @@ this.showTariffVlaue = false;
       },
       {
         "label": "LTIS2D"
+      },
+      {
+        "label": "HGN"
+      },
+      {
+        "label": "KJ"
       }
-    ]
-
-   
+    ];
+    this.availablePhaseType=[
+      {
+        "label": "Phase-1"
+      },
+      {
+        "label": "Phase-2"
+      }
+    ];
 
     this.gridColumns = this.getGridSettings();
     this.sortBy = this.sortBy;
@@ -149,7 +204,8 @@ this.showTariffVlaue = false;
       duesAmnt:['', Validators.required],
       loadBal:['', Validators.required],
       payAmnt:0,
-      securityAmnt:['']
+      securityAmnt:[''],
+      phaseTypes:[''],
     });
     this.Fetchlist();
 
@@ -302,6 +358,7 @@ this.showTariffVlaue = false;
   addDialog() {
     this.data = undefined;
     this.showTariff = false;
+    this.phaseShow = false;
     this.selectedItems.setValue([]);
     this.allSession=null;
     this.title = "Add Disconnection";
@@ -321,7 +378,8 @@ this.showTariffVlaue = false;
       duesAmnt:['', Validators.required],
       loadBal:['', Validators.required],
       payAmnt:0,
-      securityAmnt:['']
+      securityAmnt:[''],
+      phaseTypes:[''],
     });
   }
   closeScree() {
@@ -333,6 +391,7 @@ this.showTariffVlaue = false;
     this.data = event;
     this.title = "Edit Disconnection"
     this.showTariff = true;
+    this.phaseShow= true;
     this.selectedItems.setValue(event.session);
     this.WorktypeForm = this._fb.group({
       name: event.name,
@@ -349,7 +408,8 @@ this.showTariffVlaue = false;
       duesAmnt:event.duesAmnt,
       loadBal:event.loadBal,
       payAmnt :event.payAmnt,
-      securityAmnt:event.securityAmt
+      securityAmnt:event.securityAmt,
+      phaseTypes:event.phaseType
     });
   }
   submit(form) {
@@ -387,6 +447,7 @@ this.showTariffVlaue = false;
         tenantCode:"spdcl",
         payAmnt:this.WorktypeForm.get('payAmnt').value,
         securityAmnt:this.WorktypeForm.get('securityAmnt').value,
+        phaseType:this.WorktypeForm.get('phaseTypes').value,
       }
 
       this._service.saveDisconnection(object).subscribe((ele) => {
@@ -417,6 +478,7 @@ this.showTariffVlaue = false;
         payAmnt:this.WorktypeForm.get('payAmnt').value,
         tenantCode:"spdcl",
         securityAmnt:this.WorktypeForm.get('securityAmnt').value,
+        phaseType:this.WorktypeForm.get('phaseTypes').value,
       }
       this._service.saveDisconnection(prospectObj).subscribe((ele) => {
         this._notificationService.successTopRight(this._transloco.translate('TERMSCONDITION.updatemessage'));
@@ -477,7 +539,6 @@ this.showTariffVlaue = false;
   }
 
   handleSortChange(event) {
-    console.log('======sort change=======', event);
     this.sortBy = event.active;
     this.sortDirection = event.direction;
     this.sortBy = this.sortBy;
@@ -486,11 +547,8 @@ this.showTariffVlaue = false;
     this.Fetchlist();
   }
   changeSession(value) {
-    console.log("===========value====="+value);
-    
     this.showTariffVlaue = true;
     if (value != '') {
-    
       this.disconnectionAmnt= 0;
       this.meterRemovingAmnt= 0
       this.appAmnt= 0
@@ -504,11 +562,27 @@ this.showTariffVlaue = false;
   }
 
   changeTariffType(value) {
+    this.phaseType1 = value;
+    this.phaseShow = true;
+    this.availablePhaseType=[];
+    if(value ==='NDS2D' ||value ==='NDS1D'){
+      this.availablePhaseType.push({'label':'Phase-1'},{'label':'Phase-3'})
+    } else if(value ==='LTIS1D' || value ==='LTIS2D'){
+      this.availablePhaseType.push({'label':'Phase-1'},{'label':'Phase-3'})
+    }else if(value ==='IAS1D(Meterd)'|| value ==='IAS1D(Unmeterd)' || value ==='IAS2D'){
+      this.availablePhaseType.push({'label':'Phase-1'},{'label':'Phase-3'})
+    }else{
+      this.availablePhaseType.push({'label':'Phase-1'})
+    }
+  }
+  changePhaseType(value) {
+
     this.sessionTariffType = value;
     const request = {
       tenantCode: "spdcl",
-      type: value,
-      sessions: this.allSession
+      type: this.phaseType1,
+      sessions: this.allSession,
+      phaseType:value
     };
     this._service.GetSessionTariff(request).subscribe(el => {
       let valueT = [];
@@ -516,7 +590,6 @@ this.showTariffVlaue = false;
         el.data.forEach(element => {
         valueT.push(element.tariffValue);
         });
-        console.log("========valueT=============="+valueT);
         
         this.WorktypeForm.controls.tariffValue.setValue(valueT);
         this.WorktypeForm.controls.disconnectionAmnt.setValue(el.data[0].disconnectionAmnt);

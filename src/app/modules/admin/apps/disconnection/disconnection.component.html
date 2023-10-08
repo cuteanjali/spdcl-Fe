@@ -158,8 +158,17 @@
                 <mat-error></mat-error>
             </mat-form-field>&nbsp;&nbsp;
 
-          
-      
+            <mat-form-field style="width: 81%;" appearance="outline" *ngIf="phaseShow">
+                <mat-label>Select Phase Type</mat-label>
+                <mat-select   formControlName="phaseTypes" (selectionChange)="changePhaseType($event.value)">
+                    <mat-option *ngFor="let item1 of availablePhaseType"
+                    [value]="item1.label" >{{item1.label}}</mat-option>
+                </mat-select>
+                <mat-error></mat-error>
+            </mat-form-field>&nbsp;&nbsp;
+
+
+
             <mat-form-field style="width: 81%;" appearance="outline" >
                 <mat-label>Fixed Charge</mat-label>
                 <input matInput formControlName="tariffValue"  readonly>

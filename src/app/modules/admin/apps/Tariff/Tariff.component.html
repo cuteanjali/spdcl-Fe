@@ -69,6 +69,14 @@
                                 </td>
                             </ng-container>
 
+                            
+                            <ng-container matColumnDef="phaseType">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Phase Type</th>
+                                <td matTooltip ="{{element.phaseType}}" mat-cell *matCellDef="let element"> 
+                                    {{element.phaseType}}
+                                </td>
+                            </ng-container>
+
                                 <ng-container matColumnDef="tariffValue">
                                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Fixed Charge</th>
                                     <td matTooltip ="{{element.tariffValue}}" mat-cell *matCellDef="let element"> 
@@ -167,9 +175,19 @@
 
                     <mat-form-field style="width: 70%" appearance="outline">
                         <mat-label>Select Tariff</mat-label>
-                        <mat-select formControlName="tariffType">
+                        <mat-select formControlName="tariffType" (selectionChange)="changeSession($event.value)">
                             <mat-option *ngFor="let item1 of availabletariffType"
                             [value]="item1.label" >{{item1.label}}</mat-option>
+                        </mat-select>
+                        <mat-error></mat-error>
+                    </mat-form-field>&nbsp;&nbsp;
+
+                    
+                    <mat-form-field style="width: 70%" appearance="outline">
+                        <mat-label>Select Phase</mat-label>
+                        <mat-select formControlName="phaseTypes">
+                            <mat-option *ngFor="let item2 of availablePhaseType"
+                            [value]="item2.label" >{{item2.label}}</mat-option>
                         </mat-select>
                         <mat-error></mat-error>
                     </mat-form-field>&nbsp;&nbsp;
