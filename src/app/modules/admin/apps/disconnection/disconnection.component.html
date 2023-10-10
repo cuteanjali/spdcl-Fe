@@ -131,7 +131,7 @@
                 <input matInput formControlName="name">
                 <mat-error>
                 </mat-error>
-            </mat-form-field>&nbsp;&nbsp;
+            </mat-form-field>&nbsp;
 
             <mat-form-field style="width: 40%;" appearance="outline">
                 <mat-label>Meter No</mat-label>
@@ -182,18 +182,37 @@
                 <mat-error>
                 </mat-error>
             </mat-form-field>&nbsp;&nbsp;
+
+            <mat-radio-group formControlName="disconnectionApplicable">
+                <mat-radio-button class="ml-6" [value]="true">Disconnection Charge Applicable</mat-radio-button>
+                &nbsp;&nbsp; <mat-radio-button class="ml-6" [value]="false">Disconnection Charge Not Applicable</mat-radio-button>
+              </mat-radio-group>
+
             <mat-form-field style="width: 27%;" appearance="outline">
                 <mat-label>Meter Removing Charge</mat-label>
                 <input matInput formControlName="meterRemovingAmnt" type="number" readonly>
                 <mat-error>
                 </mat-error>
             </mat-form-field>&nbsp;&nbsp;
-            <mat-form-field style="width: 25%;" appearance="outline">
+
+
+            <mat-radio-group formControlName="meterRemovingApplicable">
+                <mat-radio-button class="ml-6" [value]="true">Meter Removing Charge Applicable</mat-radio-button>
+                <mat-radio-button class="ml-6" [value]="false">Meter Removing Charge Not Applicable</mat-radio-button>
+              </mat-radio-group>
+
+            <mat-form-field style="width: 27%;" appearance="outline">
                 <mat-label>Application Charge</mat-label>
                 <input matInput formControlName="appAmnt" type="number" readonly>
                 <mat-error>
                 </mat-error>
             </mat-form-field>&nbsp;&nbsp;
+
+            <mat-radio-group formControlName="appApplicable">
+                <mat-radio-button class="ml-6" [value]=true>Application Charge Applicable</mat-radio-button>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <mat-radio-button class="ml-6" [value]=false>Application Charge Not Applicable</mat-radio-button>
+              </mat-radio-group>
 
             <mat-form-field  style="width: 27%" appearance="outline">
                 <mat-label>Date Of Connection</mat-label>
@@ -222,14 +241,6 @@
                 <mat-datepicker #date3></mat-datepicker>
             </mat-form-field>&nbsp;&nbsp;
 
-            <mat-form-field style="width: 81%;" appearance="outline">
-                <mat-label>No. Of Days</mat-label>
-                <input matInput formControlName="noDays" type="number">
-                <mat-error>
-                </mat-error>
-            </mat-form-field>&nbsp;&nbsp; 
-        
-
             <mat-form-field style="width: 40%;" appearance="outline">
                 <mat-label>Dues Amount</mat-label>
                 <input matInput formControlName="duesAmnt" type="number">
@@ -245,18 +256,30 @@
             </mat-form-field>&nbsp;&nbsp; 
 
             <mat-form-field style="width: 40%;" appearance="outline">
+                <mat-label>Security Amount</mat-label>
+                <input matInput formControlName="securityAmnt" type="number">
+                <mat-error>
+                </mat-error>
+            </mat-form-field>&nbsp;&nbsp; 
+         
+
+            <mat-form-field style="width: 40%;" appearance="outline">
                 <mat-label>Final Payable Amount</mat-label>
                 <input matInput formControlName="payAmnt" type="number" readonly>
                 <mat-error>
                 </mat-error>
             </mat-form-field>&nbsp;&nbsp; 
 
-            <mat-form-field style="width: 40%;" appearance="outline">
-                <mat-label>Security Amount</mat-label>
-                <input matInput formControlName="securityAmnt" type="number">
+            <mat-form-field style="width: 81%;" appearance="outline">
+                <mat-label>No. Of Days</mat-label>
+                <input matInput formControlName="noDays" type="number">
                 <mat-error>
                 </mat-error>
             </mat-form-field>&nbsp;&nbsp; 
+        
+            
+
+           
 
             <br>
           <!-- Description Input Field -->

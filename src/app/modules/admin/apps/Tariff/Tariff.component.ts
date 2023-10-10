@@ -142,7 +142,7 @@ export class TariffComponent {
         "label": "Phase-1"
       },
       {
-        "label": "Phase-2"
+        "label": "Phase-3"
       }
     ];
     this.WorktypeForm = this._fb.group({

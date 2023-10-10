@@ -15,17 +15,38 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { disconnectionapp } from './disconnectionapp';
 import { disconnectionService } from './disconnection.service';
+import { checkValidText } from 'app/shared/validation/validation-utils';
+import { MAT_DATE_FORMATS } from '@angular/material/core';
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'LL',
+  },
+  display: {
+    dateInput: 'DD-MM-YYYY',
+    monthYearLabel: 'YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'YYYY',
+  },
+};
+
 @Component({
   selector: 'app-disconnection',
   templateUrl: './disconnection.component.html',
-  styleUrls: ['./disconnection.component.scss']
+  styleUrls: ['./disconnection.component.scss'],
+  providers: [
+   
+
+    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
+  ],
 })
+
+
 export class disconnectionComponent {
   WorktypeForm: FormGroup
   workform: FormGroup
   title: any;
   editMode = false;
-  sidenavWidth = 80;
+  sidenavWidth = 70;
   @ViewChild('sidenav') sidenav: MatSidenav;
   companyNameList = [];
   adata = [];
@@ -53,50 +74,52 @@ export class disconnectionComponent {
   activeBool: boolean = false; deletelement: any;
   modalReference: any;
   allSession = [];
+  editSession = [];
   sessionTariffType: any;
   showTariff: boolean = false
   availablekbType = [];
   sessionText = [];
   selectedItems = new FormControl([]);
-  disconnectionAmnt : any;phaseType1: any;
-;
- meterRemovingAmnt : any;;
- appAmnt : any;
- availablePhaseType=[];
- phaseShow :boolean= false;
- showTariffVlaue: boolean = false;
+  disconnectionAmnt: any; phaseType1: any;
+  ;
+  meterRemovingAmnt: any;;
+  appAmnt: any;
+  availablePhaseType = [];
+
+  
+  phaseShow: boolean = false;
+  showTariffVlaue: boolean = false;
   applyFilter(filterValue: string) {
-    console.log("=====filterValue======"+filterValue);
-    
-    if(filterValue != ''){
-    try {
-      this.dataSource = [];
-      this.loading = true;
-      this._service.getSearchDisconnection(filterValue).subscribe(data => {
-        if (data) {
-          this.dataSource = data.data;
-          this.totalRecordCount = data.data.length;
-        }
-        this.loading = false;
-      });
-}catch(err){}
-  }else{
-    this.Fetchlist();
+
+    if (filterValue != '') {
+      try {
+        this.dataSource = [];
+        this.loading = true;
+        this._service.getSearchDisconnection(filterValue).subscribe(data => {
+          if (data) {
+            this.dataSource = data.data;
+            this.totalRecordCount = data.data.length;
+          }
+          this.loading = false;
+        });
+      } catch (err) { }
+    } else {
+      this.Fetchlist();
+    }
   }
-}
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   constructor(private _fb: FormBuilder, private _service: disconnectionService, private _notificationService: NotificationService, private _matDialog: MatDialog,
     private translate: TranslateService, private _transloco: TranslocoService,
     private _httpClient: HttpClient) {
-      
-     }
+
+  }
   @ViewChild(MatPaginator) private _paginator: MatPaginator;
 
 
   ngOnInit(): void {
-this.showTariffVlaue = false;
-this.phaseShow = false;
+    this.showTariffVlaue = false;
+    this.phaseShow = false;
     this.isEnabled = true;
 
     this.availableLang = [
@@ -175,12 +198,12 @@ this.phaseShow = false;
         "label": "KJ"
       }
     ];
-    this.availablePhaseType=[
+    this.availablePhaseType = [
       {
         "label": "Phase-1"
       },
       {
-        "label": "Phase-2"
+        "label": "Phase-3"
       }
     ];
 
@@ -201,11 +224,14 @@ this.phaseShow = false;
       dateDisconnection: [''],
       dateLastBill: [''],
       noDays: ['', Validators.required],
-      duesAmnt:['', Validators.required],
-      loadBal:['', Validators.required],
-      payAmnt:0,
-      securityAmnt:[''],
-      phaseTypes:[''],
+      duesAmnt: ['', Validators.required],
+      loadBal: ['', Validators.required],
+      payAmnt: 0,
+      securityAmnt: [''],
+      phaseTypes: [''],
+      disconnectionApplicable: '',
+      meterRemovingApplicable: '',
+      appApplicable: '',
     });
     this.Fetchlist();
 
@@ -218,17 +244,17 @@ this.phaseShow = false;
   }
 
   Fetchlist() {
-          try {
-            this.dataSource = [];
-            this.loading = true;
-            this._service.getAllDisconnection().subscribe(data => {
-              if (data) {
-                this.dataSource = data.data;
-                this.totalRecordCount = data.data.length;
-              }
-              this.loading = false;
-            });
-    }catch(err){}
+    try {
+      this.dataSource = [];
+      this.loading = true;
+      this._service.getAllDisconnection().subscribe(data => {
+        if (data) {
+          this.dataSource = data.data;
+          this.totalRecordCount = data.data.length;
+        }
+        this.loading = false;
+      });
+    } catch (err) { }
 
   }
 
@@ -302,7 +328,7 @@ this.phaseShow = false;
           isIconSvg: true,
           buttonClass: 'btn-color-600'
         },
-        
+
         show: true,
         sort: false,
       },
@@ -333,7 +359,7 @@ this.phaseShow = false;
           isIconSvg: true,
           colorParameter: 'certColorCode'
         },
-        
+
         show: true,
         sort: false,
       },
@@ -348,7 +374,7 @@ this.phaseShow = false;
           tooltipKey: 'Delete',
           buttonClass: 'btn-color-600',
         },
-        
+
         show: true,
         sort: false,
       }
@@ -360,7 +386,7 @@ this.phaseShow = false;
     this.showTariff = false;
     this.phaseShow = false;
     this.selectedItems.setValue([]);
-    this.allSession=null;
+    this.allSession = null;
     this.title = "Add Disconnection";
     this.WorktypeForm = this._fb.group({
       name: ['', Validators.required],
@@ -375,45 +401,59 @@ this.phaseShow = false;
       dateDisconnection: ['', Validators.required],
       dateLastBill: ['', Validators.required],
       noDays: ['', Validators.required],
-      duesAmnt:['', Validators.required],
-      loadBal:['', Validators.required],
-      payAmnt:0,
-      securityAmnt:[''],
-      phaseTypes:[''],
+      duesAmnt: ['', Validators.required],
+      loadBal: ['', Validators.required],
+      payAmnt: 0,
+      securityAmnt: [''],
+      phaseTypes: [''],
+      disconnectionApplicable: false,
+      meterRemovingApplicable: false,
+      appApplicable: false,
     });
   }
   closeScree() {
     this.isEnabled = true;
   }
-  
+
   editdialog(event) {
-   
     this.data = event;
     this.title = "Edit Disconnection"
     this.showTariff = true;
-    this.phaseShow= true;
+    this.phaseShow = true;
     this.selectedItems.setValue(event.session);
+    if(this.showTariffVlaue){
+      this.allSession
+    }else{
+      this.allSession =[];
+      this.allSession=event.session;
+      
+    }
+   
+    
     this.WorktypeForm = this._fb.group({
       name: event.name,
       meter: event.meter,
-      tariffType:event.tariffType,
+      tariffType: event.tariffType,
       tariffValue: event.tariffValue,
       disconnectionAmnt: event.disconnectionAmnt,
-      meterRemovingAmnt:event.meterRemovingAmnt,
+      meterRemovingAmnt: event.meterRemovingAmnt,
       appAmnt: event.appAmnt,
       dateConnection: event.dateConnection,
       dateDisconnection: event.dateDisconnection,
       dateLastBill: event.dateLastBill,
       noDays: event.noOfDays,
-      duesAmnt:event.duesAmnt,
-      loadBal:event.loadBal,
-      payAmnt :event.payAmnt,
-      securityAmnt:event.securityAmt,
-      phaseTypes:event.phaseType
+      duesAmnt: event.duesAmnt,
+      loadBal: event.loadBal,
+      payAmnt: event.payAmnt,
+      securityAmnt: event.securityAmt,
+      phaseTypes: event.phaseType,
+      disconnectionApplicable: event.disconnectionApplicable,
+      meterRemovingApplicable: event.meterRemovingApplicable,
+      appApplicable: event.appApplicable,
     });
   }
   submit(form) {
-  
+
     if (this.data === undefined) {
       let connectionDate = this.WorktypeForm.get('dateConnection').value;
       let disconnectionDate = this.WorktypeForm.get('dateDisconnection').value;
@@ -423,44 +463,15 @@ this.phaseShow = false;
       this.WorktypeForm.controls.noDays.setValue(totalDays);
       if (totalDays >= 365) {
         if (dateLastBill < disconnectionDate) {
-  
+
         }
       } else {
-  
-      }
-      const object = {
-        id:"3fa85f64-0000-0000-0000-2c963f66afa6",
-        name: this.WorktypeForm.get('name').value,
-        meter: this.WorktypeForm.get('meter').value,
-        session:  this.allSession,
-        tariffType: this.WorktypeForm.get('tariffType').value,
-        tariffValue: this.WorktypeForm.get('tariffValue').value,
-        disconnectionAmnt: this.WorktypeForm.get('disconnectionAmnt').value,
-        meterRemovingAmnt: this.WorktypeForm.get('meterRemovingAmnt').value,
-        appAmnt: this.WorktypeForm.get('appAmnt').value,
-        dateConnection: this.WorktypeForm.get('dateConnection').value,
-        dateDisconnection: this.WorktypeForm.get('dateDisconnection').value,
-        dateLastBill: this.WorktypeForm.get('dateLastBill').value,
-        noOfDays: this.WorktypeForm.get('noDays').value,
-        duesAmnt:this.WorktypeForm.get('duesAmnt').value,
-        loadBal:this.WorktypeForm.get('loadBal').value,
-        tenantCode:"spdcl",
-        payAmnt:this.WorktypeForm.get('payAmnt').value,
-        securityAmnt:this.WorktypeForm.get('securityAmnt').value,
-        phaseType:this.WorktypeForm.get('phaseTypes').value,
-      }
 
-      this._service.saveDisconnection(object).subscribe((ele) => {
-        this._notificationService.successTopRight(this._transloco.translate('TERMSCONDITION.createmessage'));
-        this.Fetchlist();
-        this.adata = [];
-        this.isEnabled = true;
-        this.sidenav.close();
-      });
-    } else {
+      }
       
-      const prospectObj = {
-        id:   this.data.id, 
+      
+      const object = {
+        id: "3fa85f64-0000-0000-0000-2c963f66afa6",
         name: this.WorktypeForm.get('name').value,
         meter: this.WorktypeForm.get('meter').value,
         session: this.allSession,
@@ -473,42 +484,92 @@ this.phaseShow = false;
         dateDisconnection: this.WorktypeForm.get('dateDisconnection').value,
         dateLastBill: this.WorktypeForm.get('dateLastBill').value,
         noOfDays: this.WorktypeForm.get('noDays').value,
-        duesAmnt:this.WorktypeForm.get('duesAmnt').value,
-        loadBal:this.WorktypeForm.get('loadBal').value,
-        payAmnt:this.WorktypeForm.get('payAmnt').value,
-        tenantCode:"spdcl",
-        securityAmnt:this.WorktypeForm.get('securityAmnt').value,
-        phaseType:this.WorktypeForm.get('phaseTypes').value,
+        duesAmnt: this.WorktypeForm.get('duesAmnt').value,
+        loadBal: this.WorktypeForm.get('loadBal').value,
+        tenantCode: "spdcl",
+        payAmnt: this.WorktypeForm.get('payAmnt').value,
+        securityAmnt: this.WorktypeForm.get('securityAmnt').value,
+        phaseType: this.WorktypeForm.get('phaseTypes').value,
+        disconnectionApplicable: this.WorktypeForm.get('disconnectionApplicable').value,
+        meterRemovingApplicable: this.WorktypeForm.get('meterRemovingApplicable').value,
+        appApplicable: this.WorktypeForm.get('appApplicable').value,
       }
-      this._service.saveDisconnection(prospectObj).subscribe((ele) => {
-        this._notificationService.successTopRight(this._transloco.translate('TERMSCONDITION.updatemessage'));
-        this.Fetchlist();
-        this.adata = []
-        this.sidenav.close();
-      });
+      const validateForm = this.checkvalidation();
+      if (validateForm) {
+        this._service.saveDisconnection(object).subscribe((ele) => {
+          this._notificationService.successTopRight(this._transloco.translate('TERMSCONDITION.createmessage'));
+          this.Fetchlist();
+          this.adata = [];
+          this.isEnabled = true;
+          this.sidenav.close();
+        });
+      }
+    } else {
 
+      const prospectObj = {
+        id: this.data.id,
+        name: this.WorktypeForm.get('name').value,
+        meter: this.WorktypeForm.get('meter').value,
+        session: this.allSession,
+        tariffType: this.WorktypeForm.get('tariffType').value,
+        tariffValue: this.WorktypeForm.get('tariffValue').value,
+        disconnectionAmnt: this.WorktypeForm.get('disconnectionAmnt').value,
+        meterRemovingAmnt: this.WorktypeForm.get('meterRemovingAmnt').value,
+        appAmnt: this.WorktypeForm.get('appAmnt').value,
+        dateConnection: this.WorktypeForm.get('dateConnection').value,
+        dateDisconnection: this.WorktypeForm.get('dateDisconnection').value,
+        dateLastBill: this.WorktypeForm.get('dateLastBill').value,
+        noOfDays: this.WorktypeForm.get('noDays').value,
+        duesAmnt: this.WorktypeForm.get('duesAmnt').value,
+        loadBal: this.WorktypeForm.get('loadBal').value,
+        payAmnt: this.WorktypeForm.get('payAmnt').value,
+        tenantCode: "spdcl",
+        securityAmnt: this.WorktypeForm.get('securityAmnt').value,
+        phaseType: this.WorktypeForm.get('phaseTypes').value,
+        disconnectionApplicable: this.WorktypeForm.get('disconnectionApplicable').value,
+        meterRemovingApplicable: this.WorktypeForm.get('meterRemovingApplicable').value,
+        appApplicable: this.WorktypeForm.get('appApplicable').value,
+      }
+      const validateForm = this.checkvalidation();
+      if (validateForm) {
+        this._service.saveDisconnection(prospectObj).subscribe((ele) => {
+          this._notificationService.successTopRight(this._transloco.translate('TERMSCONDITION.updatemessage'));
+          this.Fetchlist();
+          this.adata = []
+          this.sidenav.close();
+        });
+      }
     }
   }
-  openSubPopUp(content,elementId): void {
-    console.log('check delete id ',elementId)
-    this.deletelement=elementId
+  checkvalidation(): boolean {
+
+    if (this.WorktypeForm.get('loadBal').value ==='') {
+      this._notificationService.errorTopRight(this.translate.instant('Please fill the Load(KB..)'));
+      return false;
+    }
+    return true;
+  }
+
+  openSubPopUp(content, elementId): void {
+    console.log('check delete id ', elementId)
+    this.deletelement = elementId
     this.modalReference = this._matDialog.open(content);
-   
+
   }
   deleteDisconnection() {
-        this._service.deleteDisconnection(this.deletelement,{}).subscribe(data => {
-        if (data.status==='Failed'){
-          if ('alreadyusedmessage' === data.message)
-            this._notificationService.warningTopRight(this._transloco.translate('TERMSCONDITION.alreadyusedmessage'));
+    this._service.deleteDisconnection(this.deletelement, {}).subscribe(data => {
+      if (data.status === 'Failed') {
+        if ('alreadyusedmessage' === data.message)
+          this._notificationService.warningTopRight(this._transloco.translate('TERMSCONDITION.alreadyusedmessage'));
 
-        }else if(data.status==='Success'){
-         this._notificationService.successTopRight(this._transloco.translate('TERMSCONDITION.deletemessage'));
-        }else{
-          this._notificationService.errorTopRight(this._transloco.translate('TERMSCONDITION.SomeSystemError'));
-        }
+      } else if (data.status === 'Success') {
+        this._notificationService.successTopRight(this._transloco.translate('TERMSCONDITION.deletemessage'));
+      } else {
+        this._notificationService.errorTopRight(this._transloco.translate('TERMSCONDITION.SomeSystemError'));
+      }
 
       this.Fetchlist();
-     });
+    });
   }
 
 
@@ -531,11 +592,11 @@ this.phaseShow = false;
     } else if (event.buttonAction === 'for_delete') {
       this.openSubPopUp(content, event.item.id)
     } else if (event.buttonAction === 'for_download') {
-    
-      window.open(`${environment.apiUrl}v1/downloadDisconnection/spdcl/`+event.item.id,"Independent Window",
+
+      window.open(`${environment.apiUrl}v1/downloadDisconnection/spdcl/` + event.item.id, "Independent Window",
         this.windowFeatures.join()
       );
-  }
+    }
   }
 
   handleSortChange(event) {
@@ -549,9 +610,9 @@ this.phaseShow = false;
   changeSession(value) {
     this.showTariffVlaue = true;
     if (value != '') {
-      this.disconnectionAmnt= 0;
-      this.meterRemovingAmnt= 0
-      this.appAmnt= 0
+      this.disconnectionAmnt = 0;
+      this.meterRemovingAmnt = 0
+      this.appAmnt = 0
       this.showTariff = true;
       this.allSession = value;
     } else {
@@ -564,15 +625,15 @@ this.phaseShow = false;
   changeTariffType(value) {
     this.phaseType1 = value;
     this.phaseShow = true;
-    this.availablePhaseType=[];
-    if(value ==='NDS2D' ||value ==='NDS1D'){
-      this.availablePhaseType.push({'label':'Phase-1'},{'label':'Phase-3'})
-    } else if(value ==='LTIS1D' || value ==='LTIS2D'){
-      this.availablePhaseType.push({'label':'Phase-1'},{'label':'Phase-3'})
-    }else if(value ==='IAS1D(Meterd)'|| value ==='IAS1D(Unmeterd)' || value ==='IAS2D'){
-      this.availablePhaseType.push({'label':'Phase-1'},{'label':'Phase-3'})
-    }else{
-      this.availablePhaseType.push({'label':'Phase-1'})
+    this.availablePhaseType = [];
+    if (value === 'NDS2D' || value === 'NDS1D') {
+      this.availablePhaseType.push({ 'label': 'Phase-1' }, { 'label': 'Phase-3' })
+    } else if (value === 'LTIS1D' || value === 'LTIS2D') {
+      this.availablePhaseType.push({ 'label': 'Phase-1' }, { 'label': 'Phase-3' })
+    } else if (value === 'IAS1D(Meterd)' || value === 'IAS1D(Unmeterd)' || value === 'IAS2D') {
+      this.availablePhaseType.push({ 'label': 'Phase-1' }, { 'label': 'Phase-3' })
+    } else {
+      this.availablePhaseType.push({ 'label': 'Phase-1' })
     }
   }
   changePhaseType(value) {
@@ -582,15 +643,15 @@ this.phaseShow = false;
       tenantCode: "spdcl",
       type: this.phaseType1,
       sessions: this.allSession,
-      phaseType:value
+      phaseType: value
     };
     this._service.GetSessionTariff(request).subscribe(el => {
       let valueT = [];
       if (el.data != null && el.data.length > 0) {
         el.data.forEach(element => {
-        valueT.push(element.tariffValue);
+          valueT.push(element.tariffValue);
         });
-        
+
         this.WorktypeForm.controls.tariffValue.setValue(valueT);
         this.WorktypeForm.controls.disconnectionAmnt.setValue(el.data[0].disconnectionAmnt);
         this.WorktypeForm.controls.meterRemovingAmnt.setValue(el.data[0].meterRemovingAmnt);
