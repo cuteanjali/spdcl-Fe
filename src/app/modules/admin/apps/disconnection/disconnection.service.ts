@@ -62,4 +62,16 @@ export class disconnectionService {
   
     return this._httpClient.get(`${environment.apiUrl}v1/getSearchDisconnection/spdcl/`+key);
   }
+  getAllDisconnectionPagination(request): Observable<any>
+  {
+    return this._httpClient.post(`${environment.apiUrl}v1/getAllDisconnectionPagination/spdcl`,request);
+  }
+  getDisconnectionById(key): Observable<any> {
+  
+    return this._httpClient.get(`${environment.apiUrl}v1/getDisconnectionById/spdcl/`+key);
+  }
+  viewDisconnectionById(key): Observable<any> {
+  
+    return this._httpClient.get(`${environment.apiUrl}v1/viewDisconnectionById/spdcl/`+key);
+  }
 }

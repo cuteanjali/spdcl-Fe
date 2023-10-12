@@ -1,0 +1,265 @@
+<div class="flex flex-col flex-auto min-w-0" *transloco="let t; read: 'EXAMS'">
+
+    <!-- Header -->
+    <div
+        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 min-w-0">
+
+
+            <div class="mt-2">
+                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                    <button mat-icon-button (click)="handleBack()">
+                        <mat-icon>arrow_circle_left</mat-icon>
+                    </button> {{discuser}} {{consumer}}
+                </h2>
+            </div>
+        </div>
+        <div class="flex items-center justify-end">
+            <button mat-flat-button="" type="button" (click)="downloadPDF()"
+                class="mat-focus-indicator ml-4 mat-flat-button mat-button-base mat-primary"
+                style="background: #314f60;"><span class="mat-button-wrapper"> <mat-icon
+                        svgIcon="heroicons_outline:document-download"></mat-icon>
+                    Download Disconnection Bill Pdf </span>
+            </button>
+
+        </div>
+
+
+    </div>
+
+    <div class="flex-auto p-6 sm:p-10">
+
+        <div class="max-w-3xl" style="max-width: 62rem!important;">
+
+            <form>
+
+                <div class="flex flex-col gt-xs:flex-row flex flex-col mt-4 px-8 pt-10 bg-card shadow rounded overflow-hidden"
+                    *transloco="let t; read: 'EXAMS'">
+                    <div style="margin: auto;margin-top: 50px;" *ngIf="loading">
+                        <mat-spinner *ngIf="loading" class="orange-spinner"></mat-spinner>
+                    </div>
+
+                    <div>
+
+                        <table >
+                            <tr>
+                                <th style="text-align: left;">
+                                    Consumer No : </th>
+                                <td style="text-align: left;"> {{dataList.consumer}}</td>
+                                <th></th>
+                                <th style="text-align: right;margin:22px;">
+                                    Meter reading : </th>
+                                <td>{{dataList.reading}}</td>
+
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">
+                                    Consumer Name : </th>
+                                <td>{{dataList.name}}</td>
+                                <th></th>
+                                <th style="text-align: right;margin:22px;">
+                                    Meter No. : </th>
+                                <td>{{dataList.meter}}</td>
+
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">
+                                    Connection Date : </th>
+                                <td>{{dataList.connection}}</td>
+                                <th></th>
+                                <th style="text-align: right;margin-left:22px;">
+                                    Disconnection Date : </th>
+                                <td>{{dataList.disconnection}}</td>
+
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">
+                                    Last Bill Date : </th>
+                                <td>{{dataList.lastBillDate}}</td>
+                                <th></th>
+                                <th style="text-align: right;margin:22px;">
+                                    Connection : </th>
+                                <td>{{dataList.connectionType}} {{dataList.phaseType}} </td>
+
+                            </tr>
+                            <!-- <tr>
+                                    <th style="text-align: left;">
+                                        {{t('Date')}} : </th><td>{{data.date}}</td>
+                                        <th> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                    <th style="text-align: left"> 
+                                        {{t('Time')}} : </th><td>{{data.time}} Minutes</td>
+                                  
+                                </tr> -->
+
+
+                        </table>
+                        <br>
+                        <table style="background-color: #314f60; width: 90%;">
+                            <tr>
+                                <th style="text-align: center;">
+                                    <span style="-webkit-text-fill-color: white;"> Session Tariff
+                                        {{dataList.load}}</span>
+                                <th></th>
+
+                            </tr>
+                        </table>
+                        <table style="width: 90%;border: 1px solid;border-spacing: 1px;text-align: left;">
+
+
+                            <tr style="border: 1px solid;border-spacing: 1px;text-align: left;">
+                                <td style="border: 1px solid;border-spacing: 1px;text-align: left;">Session</td>
+                                <td style="border: 1px solid;border-spacing: 1px;text-align: left;">Fixed Amount</td>
+                                <td style="border: 1px solid;border-spacing: 1px;text-align: left;">Application Amount
+                                </td>
+                                <td style="border: 1px solid;border-spacing: 1px;text-align: left;">Meter Removing
+                                    Amount</td>
+                                <td style="border: 1px solid;border-spacing: 1px;text-align: left;">Disconnection Amount
+                                </td>
+
+                            </tr>
+                            <tr *ngFor="let item of dataList.listSession; let i = index;"
+                                style="border: 1px solid;border-spacing: 1px;text-align: left;">
+                                <td style="border: 1px solid;border-spacing: 1px;text-align: left;">{{item.session}}
+                                </td>
+
+                                <td style="border: 1px solid;border-spacing: 1px;text-align: left;">{{item.fixedAmnt}}
+                                </td>
+                                <td style="border: 1px solid;border-spacing: 1px;text-align: left;">{{item.appAmnt}}
+                                </td>
+                                <td style="border: 1px solid;border-spacing: 1px;text-align: left;">{{item.meterAmnt}}
+                                </td>
+                                <td style="border: 1px solid;border-spacing: 1px;text-align: left;">{{item.discAmnt}}
+                                </td>
+
+                            </tr>
+
+
+                            <tr style="border: 1px solid;border-spacing: 1px;text-align: left;">
+                                <th style="border: 1px solid;border-spacing: 1px;text-align: left;">Total</th>
+
+                                <th style="border: 1px solid;border-spacing: 1px;text-align: left;">{{totalFixedAmnt}}
+                                </th>
+                                <th style="border: 1px solid;border-spacing: 1px;text-align: left;">{{totalAppAmnt}}
+                                </th>
+                                <th style="border: 1px solid;border-spacing: 1px;text-align: left;">
+                                    {{totalMeterRemAmnt}}</th>
+                                <th style="border: 1px solid;border-spacing: 1px;text-align: left;">{{totalDiscAmnt}}
+                                </th>
+
+                            </tr>
+                        </table>
+
+                        <br>
+                        <table style="background-color: #314f60; width: 90%;">
+                            <tr>
+                                <th style="text-align: center;">
+                                    <span style="-webkit-text-fill-color: white;"> Applicable Charge Status</span>
+                                <th></th>
+
+                            </tr>
+                        </table>
+
+                        <table style="width: 90%;border: 1px solid;border-spacing: 1px;text-align: left;">
+
+
+                            <tr style="border: 1px solid;border-spacing: 1px;text-align: left;">
+                                <th style="border: 1px solid;border-spacing: 1px;text-align: left;">Applicable Charge
+                                </th>
+                                <th style="border: 1px solid;border-spacing: 1px;text-align: center;">Applicable Status
+                                </th>
+
+
+                            </tr>
+                            <tr *ngFor="let item of dataList.listApplicable; let i = index;"
+                                style="border: 1px solid;border-spacing: 1px;text-align: left;">
+                                <td style="border: 1px solid;border-spacing: 1px;text-align: left;">
+                                    {{item.applicableTariff}}
+                                </td>
+
+
+                                <td *ngIf="item.status==='checked'"
+                                    style="border: 1px solid;border-spacing: 1px;text-align: center;"><input
+                                        type='checkbox' checked>
+                                </td>
+
+
+                                <td *ngIf="item.status!='checked'"
+                                    style="border: 1px solid;border-spacing: 1px;text-align: center;"><input
+                                        type='checkbox'>
+                                </td>
+
+                            </tr>
+                        </table>
+                        <br>
+                        <table style="width: 80%;">
+                            <tr>
+                                <th style="text-align: left;">
+                                    <u> Fixed Charge Calculation:-</u>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">
+                                    Note : {{dataList.ruleDisc}}
+                                </th>
+                            </tr>
+
+                            <tr>
+                                <th style="text-align: left;">
+                                    Fixed Calculation = {{dataList.noDays}} Days <span>&#215;</span> (
+                                    {{dataList.totalFixedAmnt}} / 30) <span>&#215;</span>{{dataList.load1}}
+                                </th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">
+                                    Total Fixed Charge = {{dataList.totalAmt}} Rs.
+                                </th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">
+                                    <u>Dues Amount = {{dataList.dues}} (Rs.)</u>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">
+                                    Total Final Payable Amount = {{dataList.totalFinalPay}} Rs <span
+                                        style="font-weight: bold;">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( {{dataList.msg}} )</span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">
+                                    <u>Other Charge</u>
+                                </th>
+                            </tr>
+
+                        </table>
+
+
+                        <table style="width: 30%;border: 0px solid;border-spacing: 1px;text-align: left;">
+
+
+                            <tr *ngFor="let item of dataList.listApplicable1; let i = index;"
+                                style="border: 0px solid;border-spacing: 1px;text-align: left;">
+                                <td style="border: 0px solid;border-spacing: 1px;text-align: left;">
+                                    {{item.applicableTariff}}
+                                </td>
+
+
+                                <th style="border: 0px solid;border-spacing: 1px;text-align: left;">
+                                    = {{item.checking}}
+                                </th>
+
+
+
+                            </tr>
+                        </table>
+                        <br>
+                        <br>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+</div>

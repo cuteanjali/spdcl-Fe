@@ -69,6 +69,13 @@ export const adminNavigation: FuseNavigationItem[] = [
         type: 'basic',
         icon: 'heroicons_outline:document-text',
         link: '/apps/role'
+    },
+    {
+        id: 'apps.bill-correction',
+        title: 'Correction',
+        type: 'basic',
+        icon: 'heroicons_outline:document-text',
+        link: '/apps/correction'
     }
    
 ]

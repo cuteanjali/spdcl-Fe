@@ -17,6 +17,7 @@ import { disconnectionapp } from './disconnectionapp';
 import { disconnectionService } from './disconnection.service';
 import { checkValidText } from 'app/shared/validation/validation-utils';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
+import { Router } from '@angular/router';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -34,9 +35,9 @@ export const MY_FORMATS = {
   templateUrl: './disconnection.component.html',
   styleUrls: ['./disconnection.component.scss'],
   providers: [
-   
 
-    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
+
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
 })
 
@@ -57,6 +58,7 @@ export class disconnectionComponent {
   availableLang = [];
   ELEMENT_DATA: disconnectionapp[] = [];
   loading: boolean = false
+  showFiled: boolean = false
   isEnabled: boolean = true;
   worktypelist = [];
   gridColumns: DataGridColumnHeader[];
@@ -86,30 +88,61 @@ export class disconnectionComponent {
   appAmnt: any;
   availablePhaseType = [];
 
-  
+  apirequest = {
+    "searchText": null,
+    "pageNo": 0,
+    "pageSize": 10,
+    "sortBy": "createdDate",
+    "sortDir": "DESC"
+  }
+
+
   phaseShow: boolean = false;
   showTariffVlaue: boolean = false;
-  applyFilter(filterValue: string) {
+  // applyFilter(filterValue: string) {
 
+  //   if (filterValue != '') {
+  //     try {
+  //       this.dataSource = [];
+  //       this.loading = true;
+  //       this._service.getSearchDisconnection(filterValue).subscribe(data => {
+  //         if (data) {
+  //           this.dataSource = data.data;
+  //           this.totalRecordCount = data.data.length;
+  //         }
+  //         this.loading = false;
+  //       });
+  //     } catch (err) { }
+  //   } else {
+  //     this.Fetchlist();
+  //   }
+  // }
+  applyFilter(filterValue: string) {
     if (filterValue != '') {
-      try {
-        this.dataSource = [];
-        this.loading = true;
-        this._service.getSearchDisconnection(filterValue).subscribe(data => {
-          if (data) {
-            this.dataSource = data.data;
-            this.totalRecordCount = data.data.length;
-          }
-          this.loading = false;
-        });
-      } catch (err) { }
+      this.apirequest = {
+        "searchText": null,
+        "pageNo": 0,
+        "pageSize": 10,
+        "sortBy": "created_date",
+        "sortDir": "DESC"
+      }
     } else {
-      this.Fetchlist();
+      this.apirequest = {
+        "searchText": null,
+        "pageNo": 0,
+        "pageSize": 10,
+        "sortBy": "createdDate",
+        "sortDir": "DESC"
+      }
     }
+
+    this.loading = true;
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.apirequest.searchText = filterValue;
+    this.Fetchlist();
   }
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: false }) sort: MatSort;
-  constructor(private _fb: FormBuilder, private _service: disconnectionService, private _notificationService: NotificationService, private _matDialog: MatDialog,
+  constructor(private router: Router,private _fb: FormBuilder, private _service: disconnectionService, private _notificationService: NotificationService, private _matDialog: MatDialog,
     private translate: TranslateService, private _transloco: TranslocoService,
     private _httpClient: HttpClient) {
 
@@ -118,51 +151,59 @@ export class disconnectionComponent {
 
 
   ngOnInit(): void {
+    this.showFiled = false;
     this.showTariffVlaue = false;
     this.phaseShow = false;
     this.isEnabled = true;
 
     this.availableLang = [
+
       {
-        "label": "2012-2013"
-      },
-      {
-        "label": "2013-2014"
-      },
-      {
-        "label": "2014-2015"
-      },
-      {
-        "label": "2015-2016"
-      },
-      {
-        "label": "2016-2017"
-      },
-      {
-        "label": "2017-2018"
-      },
-      {
-        "label": "2018-2019"
-      },
-      {
-        "label": "2019-2020"
-      },
-      {
-        "label": "2020-2021"
-      },
-      {
-        "label": "2021-2022"
-      },
-      {
-        "label": "2022-2023"
+        "label": "2024-2025"
       },
       {
         "label": "2023-2024"
       },
       {
-        "label": "2024-2025"
+        "label": "2022-2023"
+      },
+      {
+        "label": "2021-2022"
+      },
+      {
+        "label": "2020-2021"
+      },
+      {
+        "label": "2019-2020"
+      },
+      {
+        "label": "2018-2019"
+      },
+      {
+        "label": "2018-2019"
+      },
+      {
+        "label": "2017-2018"
+      },
+      {
+        "label": "2016-2017"
+      },
+      {
+
+        "label": "2015-2016"
+      },
+      {
+        "label": "2014-2015"
+      },
+      {
+        "label": "2013-2014"
+      },
+      {
+        "label": "2012-2013"
       }
-    ]
+
+
+    ];
     this.availabletariffType = [
       {
         "label": "DS1D"
@@ -232,22 +273,29 @@ export class disconnectionComponent {
       disconnectionApplicable: '',
       meterRemovingApplicable: '',
       appApplicable: '',
+      consumerNo: [''],
+      readingNo: ['']
     });
-    this.Fetchlist();
+
+    this.sortBy = this.apirequest.sortBy;
+    this.sortDirection = this.apirequest.sortDir.toLowerCase();
+
 
 
   }
 
-
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
   ngAfterViewInit() {
-
+    this.Fetchlist();
   }
 
   Fetchlist() {
     try {
       this.dataSource = [];
       this.loading = true;
-      this._service.getAllDisconnection().subscribe(data => {
+
+      this._service.getAllDisconnectionPagination(this.apirequest).subscribe(data => {
         if (data) {
           this.dataSource = data.data;
           this.totalRecordCount = data.data.length;
@@ -261,9 +309,17 @@ export class disconnectionComponent {
   getGridSettings(): DataGridColumnHeader[] {
     return [
       {
-        columnName: 'Name',
+        columnName: 'name',
         columnTitleKey: 'name',
         columnValue: 'name',
+        type: this.columnType.TEXT_W_ELLIP_L,
+        show: true,
+        sort: true,
+      },
+      {
+        columnName: 'consumer',
+        columnTitle: 'Consumer No.',
+        columnValue: 'consumerNo',
         type: this.columnType.TEXT_W_ELLIP_L,
         show: true,
         sort: true,
@@ -282,7 +338,7 @@ export class disconnectionComponent {
         columnValue: 'dateConnection',
         type: this.columnType.DATE,
         show: true,
-        sort: true,
+        sort: false,
       },
       {
         columnName: 'dateDisconnection',
@@ -290,7 +346,7 @@ export class disconnectionComponent {
         columnValue: 'dateDisconnection',
         type: this.columnType.DATE,
         show: true,
-        sort: true,
+        sort: false,
       },
       {
         columnName: 'dues',
@@ -298,7 +354,7 @@ export class disconnectionComponent {
         columnValue: 'duesAmnt',
         type: this.columnType.TEXT_W_ELLIP_L,
         show: true,
-        sort: true,
+        sort: false,
       },
       {
         columnName: 'securityAmt',
@@ -306,7 +362,7 @@ export class disconnectionComponent {
         columnValue: 'securityAmt',
         type: this.columnType.TEXT_W_ELLIP_L,
         show: true,
-        sort: true,
+        sort: false,
       },
       {
         columnName: 'pay',
@@ -314,7 +370,7 @@ export class disconnectionComponent {
         columnValue: 'payAmnt',
         type: this.columnType.TEXT_W_ELLIP_L,
         show: true,
-        sort: true,
+        sort: false,
       },
       {
         columnName: 'edit',
@@ -332,21 +388,21 @@ export class disconnectionComponent {
         show: true,
         sort: false,
       },
-      // {
-      //   columnName: 'view',
-      //   columnTitle: '',
-      //   columnValue: 'id',
-      //   type: this.columnType.BUTTON,
-      //   button: {
-      //     buttonAction: 'for_view',
-      //     icon: 'open_in_new',
-      //     tooltipKey: 'View User Result',
-      //     buttonClass: ''
-      //   },
-      //   show: true,
-      //   sort: false,
-      // }
-      // ,
+      {
+        columnName: 'view',
+        columnTitle: '',
+        columnValue: 'id',
+        type: this.columnType.BUTTON,
+        button: {
+          buttonAction: 'for_view',
+          icon: 'open_in_new',
+          tooltipKey: 'View User Result',
+          buttonClass: ''
+        },
+        show: true,
+        sort: false,
+      }
+      ,
       {
         columnName: 'download',
         columnTitleKey: '',
@@ -382,6 +438,7 @@ export class disconnectionComponent {
   }
 
   addDialog() {
+    this.showFiled = false;
     this.data = undefined;
     this.showTariff = false;
     this.phaseShow = false;
@@ -406,9 +463,11 @@ export class disconnectionComponent {
       payAmnt: 0,
       securityAmnt: [''],
       phaseTypes: [''],
-      disconnectionApplicable: false,
+      disconnectionApplicable: true,
       meterRemovingApplicable: false,
       appApplicable: false,
+      consumerNo: [''],
+      readingNo: ['']
     });
   }
   closeScree() {
@@ -416,20 +475,21 @@ export class disconnectionComponent {
   }
 
   editdialog(event) {
+    this.showFiled = true;
     this.data = event;
     this.title = "Edit Disconnection"
     this.showTariff = true;
     this.phaseShow = true;
     this.selectedItems.setValue(event.session);
-    if(this.showTariffVlaue){
+    if (this.showTariffVlaue) {
       this.allSession
-    }else{
-      this.allSession =[];
-      this.allSession=event.session;
-      
+    } else {
+      this.allSession = [];
+      this.allSession = event.session;
+
     }
-   
-    
+
+
     this.WorktypeForm = this._fb.group({
       name: event.name,
       meter: event.meter,
@@ -450,6 +510,8 @@ export class disconnectionComponent {
       disconnectionApplicable: event.disconnectionApplicable,
       meterRemovingApplicable: event.meterRemovingApplicable,
       appApplicable: event.appApplicable,
+      consumerNo: event.consumerNo,
+      readingNo: event.readingNo,
     });
   }
   submit(form) {
@@ -468,8 +530,8 @@ export class disconnectionComponent {
       } else {
 
       }
-      
-      
+
+
       const object = {
         id: "3fa85f64-0000-0000-0000-2c963f66afa6",
         name: this.WorktypeForm.get('name').value,
@@ -493,15 +555,28 @@ export class disconnectionComponent {
         disconnectionApplicable: this.WorktypeForm.get('disconnectionApplicable').value,
         meterRemovingApplicable: this.WorktypeForm.get('meterRemovingApplicable').value,
         appApplicable: this.WorktypeForm.get('appApplicable').value,
+        consumerNo: this.WorktypeForm.get('consumerNo').value,
+        readingNo: this.WorktypeForm.get('readingNo').value,
       }
       const validateForm = this.checkvalidation();
       if (validateForm) {
-        this._service.saveDisconnection(object).subscribe((ele) => {
-          this._notificationService.successTopRight(this._transloco.translate('TERMSCONDITION.createmessage'));
-          this.Fetchlist();
-          this.adata = [];
-          this.isEnabled = true;
-          this.sidenav.close();
+        this._service.saveDisconnection(object).subscribe((el) => {
+          if (el['status'] === 'Failed') {
+            this._notificationService.warningTopRight("Record updated not successfully!");
+          } else if (el['status'] === 'Success') {
+            this._notificationService.successTopRight("Record updated successfully!");
+
+            this.sidenav.close();
+            this.adata = []
+            this.Fetchlist();
+          }
+          else if (el['status'] === 'FailedUsed') {
+            this._notificationService.warningTopRight(el['message']);
+            this.WorktypeForm.controls.consumerNo.setValue('');
+          }
+          else {
+            this._notificationService.errorTopRight("System error!");
+          }
         });
       }
     } else {
@@ -529,22 +604,41 @@ export class disconnectionComponent {
         disconnectionApplicable: this.WorktypeForm.get('disconnectionApplicable').value,
         meterRemovingApplicable: this.WorktypeForm.get('meterRemovingApplicable').value,
         appApplicable: this.WorktypeForm.get('appApplicable').value,
+        consumerNo: this.WorktypeForm.get('consumerNo').value,
+        readingNo: this.WorktypeForm.get('readingNo').value,
       }
       const validateForm = this.checkvalidation();
       if (validateForm) {
-        this._service.saveDisconnection(prospectObj).subscribe((ele) => {
-          this._notificationService.successTopRight(this._transloco.translate('TERMSCONDITION.updatemessage'));
-          this.Fetchlist();
-          this.adata = []
-          this.sidenav.close();
+        this._service.saveDisconnection(prospectObj).subscribe((el) => {
+          if (el['status'] === 'Failed') {
+            this._notificationService.warningTopRight("Record updated not successfully!");
+          } else if (el['status'] === 'Success') {
+            this._notificationService.successTopRight("Record updated successfully!");
+
+            this.sidenav.close();
+            this.adata = []
+            this.Fetchlist();
+          }
+          else if (el['status'] === 'FailedUsed') {
+            this._notificationService.warningTopRight(el['message']);
+            this.WorktypeForm.controls.consumerNo.setValue('');
+          }
+          else {
+            this._notificationService.errorTopRight("System error!");
+          }
+
         });
       }
     }
   }
   checkvalidation(): boolean {
 
-    if (this.WorktypeForm.get('loadBal').value ==='') {
+    if (this.WorktypeForm.get('loadBal').value === '') {
       this._notificationService.errorTopRight(this.translate.instant('Please fill the Load(KB..)'));
+      return false;
+    }
+    if (this.WorktypeForm.get('consumerNo').value === '') {
+      this._notificationService.errorTopRight(this.translate.instant('Please fill Consumer no.'));
       return false;
     }
     return true;
@@ -596,14 +690,25 @@ export class disconnectionComponent {
       window.open(`${environment.apiUrl}v1/downloadDisconnection/spdcl/` + event.item.id, "Independent Window",
         this.windowFeatures.join()
       );
+    } if (event.buttonAction === 'for_view') {
+      this.router.navigate(['/apps/disconnection/disconnectionView/'+event.item.id]);
     }
+  }
+
+
+  handlePageFetch(event) {
+    this.pageSize = event.pageSize;
+    this.apirequest.pageSize = event.pageSize;
+    this.apirequest.pageNo = event.pageIndex;
+
+    this.Fetchlist();
   }
 
   handleSortChange(event) {
     this.sortBy = event.active;
     this.sortDirection = event.direction;
-    this.sortBy = this.sortBy;
-    //this.sortDirection = this.sortDirection.toUpperCase();
+    this.apirequest.sortBy = this.sortBy;
+    this.apirequest.sortDir = this.sortDirection.toUpperCase();
 
     this.Fetchlist();
   }

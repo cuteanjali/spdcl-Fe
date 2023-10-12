@@ -3,6 +3,7 @@ import { AuthGuard } from 'app/core/auth/guards/auth.guard';
 import { NoAuthGuard } from 'app/core/auth/guards/noAuth.guard';
 import { LayoutComponent } from 'app/layout/layout.component';
 import { InitialDataResolver } from 'app/app.resolvers';
+import { BillCorrectionModule } from 'app/modules/admin/apps/bill-correction/bill-correction.module';
 
 // @formatter:off
 /* eslint-disable max-len */
@@ -99,7 +100,9 @@ export const appRoutes: Route[] = [
                   {path: 'sessionTariff', loadChildren: () => import('app/modules/admin/apps/Tariff/Tariff.module').then(m => m.TariffModule)},
                   {path: 'disconnection', loadChildren: () => import('app/modules/admin/apps/disconnection/disconnection.module').then(m => m.disconnectionModule)},
                   {path: 'role', loadChildren: () => import('app/modules/admin/apps/role/role.module').then(m => m.RoleModule)},
-              
+                  {path: 'correction', loadChildren: () => import('app/modules/admin/apps/bill-correction/bill-correction.module').then(m => m.BillCorrectionModule)},
+                  {path: 'disconnection/disconnectionView/:id', loadChildren: () => import('app/modules/admin/apps/disconnection/view-disconnection/view-disconnection.module').then(m => m.ViewDisconnectionModule)},
+            
                   //  {path: 'workersdetails', loadChildren: () => import('app/modules/admin/apps/workersdetails/workersdetails.module').then(m => m.WorkersdetailsModule)},
               //  {path: 'hotworker-work-history', loadChildren: () => import('app/modules/admin/apps/hotworker-work-history/hotworker-work-history.module').then(m => m.HotworkerWorkHistoryModule)},
               //  {path: 'hotworker-work-history/hotworker-work-data/:id', loadChildren: () => import('app/modules/admin/apps/hotworker-work-history/hotworker-work-data/hotworker-work-data.module').then(m => m.HotworkerWorkDataModule)},

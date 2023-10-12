@@ -56,18 +56,20 @@
                         <app-data-grid
                                 [gridSettings]="gridColumns"
                                 [dataSource]="dataSource"
-                                [totalRecordCount]="totalRecordCount"
+                                [totalRecordCount]="11"
                                 [loading]="loading"
-                                [pageIndex]="pageNo"
+                                [pageIndex]="apiRequest?.pageNo"
                                 [pageSize]="pageSize"
                                 [nodataMessage]="'No Data Found'"
                                 [t]="t"
                                 [sortBy]="sortBy"
                                 [sortDirection]="sortDirection"
+                                [enableRowClick]="true"
+                                (checkboxClick)="handleCheckBoxClick($event)"
                                 (buttonClick)="handleButtonClick($event, content)"
-                             
                                 (fetchPageData)="handlePageFetch($event)"
                                 (sortChangeClick)="handleSortChange($event)"
+                                (rowClick)="handleRowClick($event)"
                             ></app-data-grid>
                         <!-- <div class="example-loading-shade" style="margin: auto;margin-top: 50px;" *ngIf="loading">
                             <mat-spinner *ngIf="loading" class="orange-spinner"></mat-spinner>
@@ -133,12 +135,28 @@
                 </mat-error>
             </mat-form-field>&nbsp;
 
-            <mat-form-field style="width: 40%;" appearance="outline">
+            <mat-form-field style="width: 20%;" appearance="outline">
+                <mat-label>Consumer No.</mat-label>
+                <input matInput formControlName="consumerNo">
+                <mat-error>
+                </mat-error>
+            </mat-form-field>&nbsp;
+
+          
+
+            <mat-form-field style="width: 15%;" appearance="outline">
                 <mat-label>Meter No</mat-label>
                 <input matInput formControlName="meter">
                 <mat-error>
                 </mat-error>
             </mat-form-field>&nbsp;&nbsp;
+
+            <mat-form-field style="width: 15%;" appearance="outline">
+                <mat-label>Meter Reading</mat-label>
+                <input matInput formControlName="readingNo">
+                <mat-error>
+                </mat-error>
+            </mat-form-field>&nbsp;
 
             <mat-form-field style="width: 50%" appearance="outline">
                 <mat-label>Select Tariff Session</mat-label>
@@ -262,6 +280,7 @@
                 </mat-error>
             </mat-form-field>&nbsp;&nbsp; 
          
+            <span *ngIf="showFiled">
 
             <mat-form-field style="width: 40%;" appearance="outline">
                 <mat-label>Final Payable Amount</mat-label>
@@ -276,7 +295,7 @@
                 <mat-error>
                 </mat-error>
             </mat-form-field>&nbsp;&nbsp; 
-        
+           </span>
             
 
            
