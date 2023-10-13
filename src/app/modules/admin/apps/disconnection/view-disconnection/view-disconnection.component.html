@@ -137,13 +137,13 @@
                             <tr style="border: 1px solid;border-spacing: 1px;text-align: left;">
                                 <th style="border: 1px solid;border-spacing: 1px;text-align: left;">Total</th>
 
-                                <th style="border: 1px solid;border-spacing: 1px;text-align: left;">{{totalFixedAmnt}}
+                                <th style="border: 1px solid;border-spacing: 1px;text-align: left;">{{dataList.totalFixedAmnt}}
                                 </th>
-                                <th style="border: 1px solid;border-spacing: 1px;text-align: left;">{{totalAppAmnt}}
+                                <th style="border: 1px solid;border-spacing: 1px;text-align: left;">{{dataList.totalAppAmnt}}
                                 </th>
                                 <th style="border: 1px solid;border-spacing: 1px;text-align: left;">
-                                    {{totalMeterRemAmnt}}</th>
-                                <th style="border: 1px solid;border-spacing: 1px;text-align: left;">{{totalDiscAmnt}}
+                                    {{dataList.totalMeterRemAmnt}}</th>
+                                <th style="border: 1px solid;border-spacing: 1px;text-align: left;">{{dataList.totalDiscAmnt}}
                                 </th>
 
                             </tr>
@@ -179,13 +179,13 @@
 
                                 <td *ngIf="item.status==='checked'"
                                     style="border: 1px solid;border-spacing: 1px;text-align: center;"><input
-                                        type='checkbox' checked>
+                                        type='checkbox' checked [disabled]="ReadOnlyStyleGuideNotes">
                                 </td>
 
 
                                 <td *ngIf="item.status!='checked'"
                                     style="border: 1px solid;border-spacing: 1px;text-align: center;"><input
-                                        type='checkbox'>
+                                        type='checkbox' [disabled]="ReadOnlyStyleGuideNotes">
                                 </td>
 
                             </tr>

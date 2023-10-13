@@ -15,8 +15,11 @@ export class ViewDisconnectionComponent {
   dataList: any;
   loading: boolean;
   chh: any;
+  ReadOnlyStyleGuideNotes: boolean;
+  
   constructor(private _service: disconnectionService,private router: Router,private route: ActivatedRoute) { }
   ngOnInit(): void {
+    this.ReadOnlyStyleGuideNotes = true;
     this.chh="checked";
     this.viewDisconnection();
    this.route.params.subscribe((params: Params) => {
