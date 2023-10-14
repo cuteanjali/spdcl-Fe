@@ -72,7 +72,7 @@ export const adminNavigation: FuseNavigationItem[] = [
     },
     {
         id: 'apps.bill-correction',
-        title: 'Correction',
+        title: 'Bill Correction',
         type: 'basic',
         icon: 'heroicons_outline:document-text',
         link: '/apps/correction'

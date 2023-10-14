@@ -19,27 +19,15 @@ export class AuthService {
         private _userService: UserService,private _service: TariffService,
     ) {}
   
-    ngAfterViewInit() {
-        //this.GenerateRefreshToken();
-    }
-    //   GenerateRefreshToken() {
-    //     let obj = {
-    //         "token" : this.GetToken()
-    //     }
+ 
+   
+   
       
-    //       this._service.getRefreshToken(obj).subscribe((el) => {
-    //         if (el){
-    //           console.log("================exxpppppppppppppppppp==========="+el['accessToken']);
-              
-    //         }
-    //      });
-    //     // return this._service.getRefreshToken(obj)
-    //   }
     set accessToken(token: string) {
         localStorage.setItem('accessToken', token);
     }
 
-    get accessToken(): string {
+    getaccessToken(): string {
         return localStorage.getItem('accessToken') ?? '';
     }
 
@@ -103,7 +91,15 @@ export class AuthService {
         );
     }
 
-  
+    // GenerateRefreshToken() {
+    //     let obj = {
+    //         "token" : this.GetToken()
+    //     }
+    //     console.log("===========");
+    //     return this._httpClient.post(`${environment.apiUrl}v1/refreshToken`,obj);
+       
+        
+    //   }
     /**
      * Sign in using the access token
      */
