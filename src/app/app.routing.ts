@@ -11,14 +11,14 @@ import { BillCorrectionModule } from 'app/modules/admin/apps/bill-correction/bil
 export const appRoutes: Route[] = [
 
     // Redirect empty path to '/dashboards/project'
-    {path: '', pathMatch : 'full', redirectTo: 'pages/settings'},
+    {path: '', pathMatch : 'full', redirectTo: 'apps/dashboard'},
 
     // Redirect signed in user to the '/dashboards/project'
     //
     // After the user signs in, the sign in page will redirect the user to the 'signed-in-redirect'
     // path. Below is another redirection for that path to redirect the user to the desired
     // location. This is a small convenience to keep all main routes together here on this file.
-    {path: 'signed-in-redirect', pathMatch : 'full', redirectTo: 'apps/disconnection'},
+    {path: 'signed-in-redirect', pathMatch : 'full', redirectTo: 'apps/dashboard'},
 
     // Auth routes for guests
     {
@@ -77,16 +77,16 @@ export const appRoutes: Route[] = [
         children   : [
 
             // Dashboards
-            {path: 'dashboards', children: [
-                {path: 'project', loadChildren: () => import('app/modules/admin/dashboards/project/project.module').then(m => m.ProjectModule)},
-                {path: 'analytics', loadChildren: () => import('app/modules/admin/dashboards/analytics/analytics.module').then(m => m.AnalyticsModule)},
-                {path: 'finance', loadChildren: () => import('app/modules/admin/dashboards/finance/finance.module').then(m => m.FinanceModule)},
-                {path: 'crypto', loadChildren: () => import('app/modules/admin/dashboards/crypto/crypto.module').then(m => m.CryptoModule)},
-            ]},
+            // {path: 'dashboard', children: [
+            //     {path: 'project', loadChildren: () => import('app/modules/admin/dashboards/project/project.module').then(m => m.ProjectModule)},
+            //     {path: 'analytics', loadChildren: () => import('app/modules/admin/dashboards/analytics/analytics.module').then(m => m.AnalyticsModule)},
+            //     {path: 'finance', loadChildren: () => import('app/modules/admin/dashboards/finance/finance.module').then(m => m.FinanceModule)},
+            //     {path: 'crypto', loadChildren: () => import('app/modules/admin/dashboards/crypto/crypto.module').then(m => m.CryptoModule)},
+            // ]},
 
             // Apps
             {path: 'apps', children: [
-        
+                 {path: 'dashboard', loadChildren: () => import('app/modules/admin/dashboards/project/project.module').then(m => m.ProjectModule)},
               //  {path: 'sessionTariff', loadChildren: () => import('app/modules/admin/apps/users/users.module').then(m => m.UsersModule)},
               
               

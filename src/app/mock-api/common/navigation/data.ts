@@ -8,6 +8,14 @@ import { FuseNavigationItem } from '@fuse/components/navigation';
 // {
 export const defaultNavigation: FuseNavigationItem[] = [
     {
+        id: 'dashboard',
+        title: 'Dashboard',
+        titleKey: 'Dashboard',
+        type: 'basic',
+        icon: 'heroicons_outline:server',
+        link: '/apps/dashboard'
+    },
+    {
         id: 'Session Tariff',
         title: 'Session Tariff',
         titleKey: 'SIDENAV.S1',
@@ -40,6 +48,14 @@ export const defaultNavigation: FuseNavigationItem[] = [
    
 ]
 export const adminNavigation: FuseNavigationItem[] = [
+    {
+        id: 'dashboard',
+        title: 'Dashboard',
+        titleKey: 'Dashboard',
+        type: 'basic',
+        icon: 'heroicons_outline:server',
+        link: '/apps/dashboard'
+    },
     {
         id: 'Session Tariff',
         title: 'Session Tariff',
@@ -74,13 +90,20 @@ export const adminNavigation: FuseNavigationItem[] = [
         id: 'apps.bill-correction',
         title: 'Bill Correction',
         type: 'basic',
-        icon: 'heroicons_outline:document-text',
+        icon: 'heroicons_outline:check-circle',
         link: '/apps/correction'
     }
    
 ]
 export const executiveAssistantNavigation: FuseNavigationItem[] = [
-  
+    {
+        id: 'dashboard',
+        title: 'Dashboard',
+        titleKey: 'Dashboard',
+        type: 'basic',
+        icon: 'heroicons_outline:server',
+        link: '/apps/dashboard'
+    },
     {
         id: 'Disconnection',
         title: 'Disconnection',
@@ -91,6 +114,14 @@ export const executiveAssistantNavigation: FuseNavigationItem[] = [
     }
 ]
 export const itAssistantNavigation: FuseNavigationItem[] = [
+    {
+        id: 'dashboard',
+        title: 'Dashboard',
+        titleKey: 'Dashboard',
+        type: 'basic',
+        icon: 'heroicons_outline:server',
+        link: '/apps/dashboard'
+    },
     {
         id: 'apps.employee',
         title: 'Employee',
